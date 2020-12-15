@@ -2,7 +2,7 @@
     "name": "demo3",
     "version": "7.1.7",
     "private": true,
-    "homepage": "/metronic/react/demo3",
+    "homepage": "http://13.236.153.174",
     "scripts": {
         "start": "react-scripts start -o",
         "build": "react-scripts build",
