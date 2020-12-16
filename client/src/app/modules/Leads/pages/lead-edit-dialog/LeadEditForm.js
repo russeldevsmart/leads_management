@@ -4,26 +4,25 @@
 // https://hackernoon.com/react-form-validation-with-formik-and-yup-8b76bda62e10
 import React , { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import * as actions from "../../_redux/leadsActions";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
 import {
   Input,
+  SearchSelect,
   Select,
   DatePickerField,
+  NumberInput,
+  PhoneNumberInput
 } from "../../../../../_metronic/_partials/controls";
-import { categories, categoryColumns } from "../../constants";
+import { categories, categoryColumns, years } from "../../constants";
 
-// Regular Expression for phone number input
-const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+// Field types
 const dateFields = ["inspection_date", "service_date", "verification_date"];
-
-Yup.addMethod(Yup.string, 'testYear', function(args) {
-  const { message } = args;
-  return this.test('testYear', message, function(value) {
-    const isNumber = /^-?\d+$/.test(value);
-    return isNumber && parseInt(value) > 1900 && parseInt(value) < 2050;
-  });
-});
+const selectFields = ["make", "model"];
+const numberFields = ["trade_in_budget", "requested_price", "budget", "mileage"]
 
 export function LeadEditForm({
   saveLead,
@@ -31,121 +30,83 @@ export function LeadEditForm({
   actionsLoading,
   onHide,
 }) {
+
+  // Leads Redux state
+  const dispatch = useDispatch();
+  const { makes, models } = useSelector(
+    (state) => ({
+      makes: state.leads.makes,
+      models: state.leads.models,
+    }),
+    shallowEqual
+  );
+
   const [ category, setCategory ] = useState("buy_cash");
+  const [ phoneValid, setPhoneValid ] = useState("NOTHING");
+  const [ typingTimeout, setTypingTimeout ] = useState(null);
+  const [ phoneLoading, setPhoneLoading ] = useState(false);
+  const [ phoneNumber, setPhoneNumber ] = useState("");
+
   useEffect(() => {
-    if (lead._id) setCategory(lead.category_type);
+    if (lead._id) {
+      setCategory(lead.category_type);
+      setPhoneNumber(lead.phone);
+    }
   }, [lead]);
 
   // Validation schema
   const LeadEditSchema = Yup.object().shape({
     name: Yup.string()
       .required("Name is required"),
-    phone: Yup.string()
-      .matches(phoneRegExp, "Phone number is not valid")
-      .required("Phone number is required"),
     email: Yup.string()
       .email("Invalid email")
       .required("Email is required"),
-    client_type: Yup.string()
-      .required("Client Type is required"),
-    comments: Yup.string()
-      .required("Comments is required"),
-      listing_link: Yup.lazy(value => {
-      if (categoryColumns[category].includes("listing_link"))
-        return Yup.string().required("Listing Link is required");
-      return Yup.mixed().notRequired();
-    }),
-    make: Yup.lazy(value => {
-      if (categoryColumns[category].includes("make")) {
-        return Yup.string().required("Make is required");
-      }
-      return Yup.mixed().notRequired();
-    }),
-    model: Yup.lazy(value => {
-      if (categoryColumns[category].includes("model"))
-        return Yup.string().required("Model is required");
-      return Yup.mixed().notRequired();
-    }),
-    year: Yup.lazy(value => {
-      if (categoryColumns[category].includes("year"))
-        return Yup.string().required("Year is required").testYear({message: "Wrong year format!"});
-      return Yup.mixed().notRequired();
-    }),
-    mileage: Yup.lazy(value => {
-      if (categoryColumns[category].includes("mileage"))
-        return Yup.string().required("Mileage is required");
-      return Yup.mixed().notRequired();
-    }),
-    requested_price: Yup.lazy(value => {
-      if (categoryColumns[category].includes("requested_price"))
-        return Yup.string().required("The price requested is required");
-      return Yup.mixed().notRequired();
-    }),
-    budget: Yup.lazy(value => {
-      if (categoryColumns[category].includes("budget"))
-        return Yup.string().required("Budget is required");
-      return Yup.mixed().notRequired();
-    }),
-    trade_in_budget: Yup.lazy(value => {
-      if (categoryColumns[category].includes("trade_in_budget"))
-        return Yup.string().required("Trade in budget is required");
-      return Yup.mixed().notRequired();
-    }),
-    status: Yup.lazy(value => {
-      if (categoryColumns[category].includes("status"))
-        return Yup.string().required("Status is required");
-      return Yup.mixed().notRequired();
-    }),
-    request_type: Yup.lazy(value => {
-      if (categoryColumns[category].includes("request_type"))
-        return Yup.string().required("Request Type is required");
-      return Yup.mixed().notRequired();
-    }),
-    request: Yup.lazy(value => {
-      if (categoryColumns[category].includes("request")) {
-        return Yup.string().required("Request is required");
-      }
-      return Yup.mixed().notRequired();
-    }),
-    source: Yup.lazy(value => {
-      if (categoryColumns[category].includes("source"))
-        return Yup.string().required("Source is required");
-      return Yup.mixed().notRequired();
-    }),
-    service: Yup.lazy(value => {
-      if (categoryColumns[category].includes("service"))
-        return Yup.string().required("Service is required");
-      return Yup.mixed().notRequired();
-    }),
-    service_date: Yup.lazy(value => {
-      if (categoryColumns[category].includes("service_date"))
-        return Yup.string().required("Service Date is required");
-      return Yup.mixed().notRequired();
-    }),
-    spare_part_requested: Yup.lazy(value => {
-      if (categoryColumns[category].includes("spare_part_requested"))
-        return Yup.string().required("Spare Part Requested is required");
-      return Yup.mixed().notRequired();
-    }),
-    details: Yup.lazy(value => {
-      if (categoryColumns[category].includes("details"))
-        return Yup.string().required("Details is required");
-      return Yup.mixed().notRequired();
-    }),
-    verification_date: Yup.lazy(value => {
-      if (categoryColumns[category].includes("verification_date"))
-        return Yup.string().required("Verification Date is required");
-      return Yup.mixed().notRequired();
-    }),
-    inspection_date: Yup.lazy(value => {
-      if (categoryColumns[category].includes("inspection_date"))
-        return Yup.string().required("Inspection Date is required");
-      return Yup.mixed().notRequired();
-    }),
   });
 
   const handleChangeCategory = (e) => {
     setCategory(e.target.value);
+  }
+
+  const handleMakeChange = (option) => {
+    dispatch(actions.fetchCarModels(option.value));
+  }
+
+  const handlePhoneInput = async (phone) => {
+    if (!phone) {
+      setPhoneValid("NOTHING");
+      return;
+    }
+    setPhoneLoading(false);
+    if (typingTimeout) clearTimeout(typingTimeout);
+    setTypingTimeout(
+      setTimeout(async function() {
+        setPhoneLoading(true);
+        try {
+          const res = await axios.get(`/api/rest/verify-phone-number?number=${phone}`);
+          setPhoneLoading(false);
+          if (res.data.valid === true) {
+            setPhoneValid("VALID");
+            setPhoneNumber(res.data.international_format);
+          }
+          else
+            setPhoneValid("INVALID");
+        } catch (error) {
+          console.log(error);
+          setPhoneLoading(false);
+          setPhoneValid("INVALID");
+        }
+      }, 1000)
+    )
+  }
+
+  const createLead = (values) => {
+    let newValues = values;
+    // Format number fields
+    numberFields.forEach(elem => {
+      if (typeof newValues[elem] === "string")
+        newValues[elem] = parseFloat(newValues[elem].replaceAll(",", ""));
+    });
+    saveLead({...newValues, category_type: category, phone: phoneNumber});
   }
 
   return (
@@ -155,7 +116,8 @@ export function LeadEditForm({
         initialValues={lead}
         validationSchema={LeadEditSchema}
         onSubmit={(values) => {
-          saveLead({...values, category_type: category});
+          if (phoneValid === "INVALID") return;
+          createLead(values);
         }}
       >
         {({ handleSubmit }) => (
@@ -189,15 +151,21 @@ export function LeadEditForm({
                       component={Input}
                       placeholder="Name"
                       label="Name"
+                      withFeedbackLabel={true}
                     />
                   </div>
                   {/* Phone */}
                   <div className="col-lg-4 mb-5">
-                    <Field
+                    <PhoneNumberInput
                       name="phone"
-                      component={Input}
+                      label="phone"
+                      country="CI"
                       placeholder="Phone"
-                      label="Phone"
+                      value={phoneNumber}
+                      onChange={handlePhoneInput}
+                      isValid={phoneValid}
+                      customFeedbackLabel={"Wrong format!"}
+                      loading={phoneLoading}
                     />
                   </div>
                   {/* Email */}
@@ -208,6 +176,7 @@ export function LeadEditForm({
                       component={Input}
                       placeholder="Email"
                       label="Email"
+                      withFeedbackLabel={true}
                     />
                   </div>
                 </div>
@@ -216,26 +185,80 @@ export function LeadEditForm({
                   categoryColumns[category].length > 0 && (
                     categoryColumns[category].map((column, index) => {
                       const label = column.charAt(0).toUpperCase() + column.replaceAll('_', ' ').slice(1);
-                      return (
-                        <div className="col-lg-4 mb-6" key={index}>
-                          {
-                            dateFields.includes(column) ? (
-                              <DatePickerField
-                                name={column}
-                                label={label}
-                              />
-                            ) : (
-                              <Field
-                                type="text"
-                                name={column}
-                                component={Input}
-                                placeholder={label}
-                                label={label}
-                              />
-                            )
-                          }
-                        </div>
-                      )
+                      if (column === 'year') {
+                        return (
+                          <div className="col-lg-4 mb-6" key={index}>
+                            <Select name={column} label={label}>
+                              {
+                                years && years.map((year, index) => {
+                                  return (
+                                    <option value={year} key={index}>{year}</option>
+                                  )
+                                })
+                              }
+                            </Select>
+                          </div>
+                        )
+                      }
+                      else if (dateFields.includes(column)) {
+                        return (
+                          <div className="col-lg-4 mb-6" key={index}>
+                            <DatePickerField
+                              name={column}
+                              label={label}
+                            />
+                          </div>
+                        )
+                      }
+                      else if (selectFields.includes(column) && column === 'make') {
+                        return (
+                          <div className="col-lg-4 mb-6" key={index}>
+                            <SearchSelect
+                              name={column}
+                              label={label}
+                              options={makes}
+                              changeFunc={handleMakeChange}
+                            />
+                          </div>
+                        )
+                      }
+                      else if (selectFields.includes(column) && column === 'model') {
+                        return (
+                          <div className="col-lg-4 mb-6" key={index}>
+                            <SearchSelect
+                              name={column}
+                              label={label}
+                              options={models}
+                            />
+                          </div>
+                        )
+                      }
+                      else if (numberFields.includes(column)) {
+                        return (
+                          <div className="col-lg-4 mb-6" key={index}>
+                            <Field
+                              type="number"
+                              name={column}
+                              component={NumberInput}
+                              placeholder={label}
+                              label={label}
+                            />
+                          </div>
+                        )
+                      }
+                      else {
+                        return (
+                          <div className="col-lg-4 mb-6" key={index}>
+                            <Field
+                              type="text"
+                              name={column}
+                              component={Input}
+                              placeholder={label}
+                              label={label}
+                            />
+                          </div>
+                        )
+                      }
                     })
                   )
                 }

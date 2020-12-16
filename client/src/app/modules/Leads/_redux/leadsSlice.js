@@ -5,6 +5,7 @@ const initialLeadsState = {
   actionsLoading: false,
   totalCount: 0,
   entities: null,
+  makes: null,
   leadForEdit: undefined,
   lastError: null
 };
@@ -35,8 +36,12 @@ export const leadsSlice = createSlice({
     },
     // getLeadById
     leadFetched: (state, action) => {
+      const { carModels, leadForEdit } = action.payload;
       state.actionsLoading = false;
-      state.leadForEdit = action.payload.leadForEdit;
+      state.leadForEdit = leadForEdit;
+      state.models = carModels.map((model) => {
+        return { label: model.name, value: model.id_car_model, _id: model._id };
+      });
       state.error = null;
     },
     // findLeads
@@ -49,7 +54,7 @@ export const leadsSlice = createSlice({
     },
     // createLead
     leadCreated: (state, action) => {
-      state.ewactionsLoading = false;
+      state.actionsLoading = false;
       state.error = null;
       state.entities.push(action.payload.lead);
     },
@@ -78,16 +83,22 @@ export const leadsSlice = createSlice({
         el => !action.payload.ids.includes(el.id)
       );
     },
-    // leadsUpdateState
-    leadsStatusUpdated: (state, action) => {
-      state.actionsLoading = false;
+    // makesFetched
+    makesFetched: (state, action) => {
+      const { carMakes } = action.payload;
       state.error = null;
-      const { ids, status } = action.payload;
-      state.entities = state.entities.map(entity => {
-        if (ids.findIndex(id => id === entity.id) > -1) {
-          entity.status = status;
-        }
-        return entity;
+      state.actionsLoading = false;
+      state.makes = carMakes.map((make) => {
+        return { label: make.name, value: make.id_car_make, _id: make._id };
+      });
+    },
+    // modelsFetched
+    modelsFetched: (state, action) => {
+      const { carModels } = action.payload;
+      state.error = null;
+      state.actionsLoading = false;
+      state.models = carModels.map((model) => {
+        return { label: model.name, value: model.id_car_model, _id: model._id };
       });
     }
   }

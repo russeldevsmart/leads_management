@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { useLocation } from "react-router";
 import { NavLink } from "react-router-dom";
 import objectPath from "object-path";
@@ -7,12 +7,11 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import SVG from "react-inlinesvg";
 import { useHtmlClassService } from "../../_core/MetronicLayout";
 import { toAbsoluteUrl, checkIsActive } from "../../../_helpers";
-import { AsideSearch } from "./AsideSearch";
+// import { AsideSearch } from "./AsideSearch";
 import { AsideMenu } from "./aside-menu/AsideMenu";
 import { LanguageSelectorDropdown } from "../extras/dropdowns/LanguageSelectorDropdown";
 import { QuickUserToggler } from "../extras/QuickUserToggler";
 import { Brand } from "../brand/Brand";
-import { KTUtil } from "./../../../_assets/js/components/util";
 
 export function Aside() {
   const uiService = useHtmlClassService();
@@ -54,28 +53,11 @@ export function Aside() {
       ),
     };
   }, [uiService]);
-
-  const tabs = {
-    tabId1: "kt_aside_tab_1",
-    tabId2: "kt_aside_tab_2",
-  };
   
   const getMenuItemActive = (url, hasSubmenu = false) => {
     return checkIsActive(location, url)
       ? ` active `
       : "";
-  };
-
-  const [activeTab, setActiveTab] = useState(tabs.tabId1);
-  const handleTabChange = (id) => {
-    setActiveTab(id);
-    const asideWorkspace = KTUtil.find(
-      document.getElementById("kt_aside"),
-      ".aside-secondary .aside-workspace"
-    );
-    if (asideWorkspace) {
-      KTUtil.scrollUpdate(asideWorkspace);
-    }
   };
 
   return (
@@ -99,7 +81,6 @@ export function Aside() {
                   "/leads",
                   false
                 )}`}
-                className="nav-item mb-3 "
                 data-toggle="tooltip"
                 data-placement="rigth"
                 data-container="body"
@@ -118,47 +99,11 @@ export function Aside() {
                     <span className="svg-icon svg-icon-lg">
                       <SVG
                         src={toAbsoluteUrl(
-                          "/media/svg/icons/Layout/Layout-4-blocks.svg"
-                        )}
-                      />
-                    </span>
-                  </NavLink>
-                </OverlayTrigger>
-              </li>
-              {/* end::Item */}
-
-              {/* begin::Item */}
-              <li
-                className="nav-item mb-3"
-                data-toggle="tooltip"
-                data-placement="rigth"
-                data-container="body"
-                data-boundary="window"
-                title="Metronic Features"
-              >
-                <OverlayTrigger
-                  placement="right"
-                  overlay={
-                    <Tooltip id="metronic-features">Metronic Features</Tooltip>
-                  }
-                >
-                  <a
-                    href="#"
-                    className={`nav-link btn btn-icon btn-clean btn-lg ${activeTab ===
-                      tabs.tabId2 && "active"}`}
-                    data-toggle="tab"
-                    data-target={`#${tabs.tabId2}`}
-                    onClick={() => handleTabChange(tabs.tabId2)}
-                    role="tab"
-                  >
-                    <span className="svg-icon svg-icon-lg">
-                      <SVG
-                        src={toAbsoluteUrl(
                           "/media/svg/icons/Communication/Group.svg"
                         )}
                       />
                     </span>
-                  </a>
+                  </NavLink>
                 </OverlayTrigger>
               </li>
               {/* end::Item */}
@@ -205,8 +150,7 @@ export function Aside() {
               {/* begin::Workspace */}
               <div className="aside-workspace scroll scroll-push my-2">
                 <div className="tab-content">
-                  <AsideSearch isActive={activeTab === tabs.tabId1} />
-                  <AsideMenu isActive={activeTab === tabs.tabId2} />
+                  <AsideMenu isActive={checkIsActive(location, "/leads")} />
                 </div>
               </div>
               {/* end::Workspace */}

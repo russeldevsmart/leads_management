@@ -27,6 +27,7 @@ export function LeadEditDialog({ id, show, onHide }) {
 
   useEffect(() => {
     // server call for getting Lead by id
+    dispatch(actions.fetchCarMakes());
     dispatch(actions.fetchLead(id));
   }, [id, dispatch]);
 

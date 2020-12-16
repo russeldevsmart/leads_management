@@ -1,6 +1,7 @@
 import React from "react";
-import {useField} from "formik";
+import {useField, useFormikContext} from "formik";
 import {FieldFeedbackLabel} from "./FieldFeedbackLabel";
+import CustomSelect from "react-select";
 
 const getFieldCSSClasses = (touched, errors) => {
   const classes = ["form-control", "form-control-solid"];
@@ -45,4 +46,23 @@ export function Select({
       )}
     </>
   );
-}
+};
+
+export function SearchSelect({ ...props }) {
+  const { setFieldValue } = useFormikContext();
+  const [field] = useField(props);
+  return (
+    <>
+      {props.label && <label>Select {props.label}</label>}
+      <CustomSelect
+        {...props}
+        value={props.options ? props.options.find(option => option._id === field.value) : null}
+        onChange={option => {
+          if (props.changeFunc)
+            props.changeFunc(option);
+          setFieldValue(field.name, option._id);
+        }}
+      />
+    </>
+  );
+};

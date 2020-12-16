@@ -95,14 +95,14 @@ export function LeadsTable() {
       headerSortingClasses,
     },
     {
-      dataField: "make",
+      dataField: "make.name",
       text: "Make",
       sort: true,
       sortCaret: sortCaret,
       headerSortingClasses,
     },
     {
-      dataField: "model",
+      dataField: "model.name",
       text: "Model",
       sort: true,
       sortCaret: sortCaret,

@@ -27,14 +27,6 @@ export function updateLead(lead) {
   return axios.post(`${LEADS_URL}/update`, { lead });
 }
 
-// UPDATE Status
-export function updateStatusForLeads(ids, status) {
-  return axios.post(`${LEADS_URL}/updateStatusForLeads`, {
-    ids,
-    status
-  });
-}
-
 // DELETE => delete the lead from the server
 export function deleteLead(leadId) {
   return axios.delete(`${LEADS_URL}/delete?id=${leadId}`);
@@ -43,4 +35,14 @@ export function deleteLead(leadId) {
 // DELETE Leads by ids
 export function deleteLeads(ids) {
   return axios.post(`${LEADS_URL}/deleteLeads`, { ids });
+}
+
+// Get Car Makes
+export function getCarMakes() {
+  return axios.get(`${LEADS_URL}/get-car-makes`);
+}
+
+// Get Car Models
+export function getCarModels(makeId) {
+  return axios.get(`${LEADS_URL}/get-car-models?make=${makeId}`);
 }

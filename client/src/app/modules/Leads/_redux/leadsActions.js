@@ -3,6 +3,34 @@ import {leadsSlice, callTypes} from "./leadsSlice";
 
 const {actions} = leadsSlice;
 
+export const fetchCarMakes = () => dispatch => {
+  dispatch(actions.startCall({ callType: callTypes.action }));
+  return requestFromServer
+    .getCarMakes()
+    .then(response => {
+      const { carMakes } = response.data;
+      dispatch(actions.makesFetched({ carMakes }));
+    })
+    .catch(error => {
+      error.clientMessage = "Can't fetch makes";
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+    });
+}
+
+export const fetchCarModels = (makeId) => dispatch => {
+  dispatch(actions.startCall({ callType: callTypes.action }));
+  return requestFromServer
+    .getCarModels(makeId)
+    .then(response => {
+      const { carModels } = response.data;
+      dispatch(actions.modelsFetched({ carModels }));
+    })
+    .catch(error => {
+      error.clientMessage = "Can't fetch models";
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+    });
+}
+
 export const fetchLeads = queryParams => dispatch => {
   dispatch(actions.startCall({ callType: callTypes.list }));
   return requestFromServer
@@ -19,15 +47,15 @@ export const fetchLeads = queryParams => dispatch => {
 
 export const fetchLead = id => dispatch => {
   if (!id) {
-    return dispatch(actions.leadFetched({ leadForEdit: undefined }));
+    return dispatch(actions.leadFetched({ leadForEdit: undefined, carModels: [] }));
   }
 
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .getLeadById(id)
     .then(response => {
-      const { lead } = response.data;
-      dispatch(actions.leadFetched({ leadForEdit: lead }));
+      const { lead, carModels } = response.data;
+      dispatch(actions.leadFetched({ leadForEdit: lead, carModels }));
     })
     .catch(error => {
       error.clientMessage = "Can't find lead";
@@ -75,21 +103,7 @@ export const updateLead = lead => dispatch => {
     });
 };
 
-export const updateLeadsStatus = (ids, status) => dispatch => {
-  dispatch(actions.startCall({ callType: callTypes.action }));
-  return requestFromServer
-    .updateStatusForLeads(ids, status)
-    .then(() => {
-      dispatch(actions.leadsStatusUpdated({ ids, status }));
-    })
-    .catch(error => {
-      error.clientMessage = "Can't update leads status";
-      dispatch(actions.catchError({ error, callType: callTypes.action }));
-    });
-};
-
 export const deleteLeads = ids => dispatch => {
-  console.log(ids);
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .deleteLeads(ids)

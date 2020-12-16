@@ -275,3 +275,59 @@
 .resize-none {
 	resize: none;
 }
+
+
+// Phone number input custom
+.react-tel-input{
+	.special-label {
+		display: none;
+	}
+	.form-control {
+		font-size: 1rem;
+		border: 1px solid #E4E6EF;
+    	border-radius: 0.42rem;
+		width: 100%;
+		outline: none;
+		padding: 0.65rem 1rem 0.65rem 4rem;
+		transition: box-shadow ease .25s,border-color ease .25s;
+		&.is-invalid {
+			border-color: $danger;
+			&:focus {
+				border-color: $danger;
+			}
+			&:hover {
+				border-color: $danger;
+			}
+		}
+		&.is-valid {
+			border-color: $success;
+			&:focus {
+				border-color: $success;
+			}
+			&:hover {
+				border-color: $success;
+			}
+		}
+		&:hover {
+			border: 1px solid #E4E6EF;
+		}
+		&:focus {
+			color: #3F4254;
+			background-color: #ffffff;
+			border-color: #30e3da;
+			outline: 0;
+		}
+	}
+	.flag-dropdown {
+		.country-list {
+			li.country {
+				&:focus {
+					outline: 0;
+				}
+			}
+		}
+	}
+	&~ .invalid-feedback, &~ .valid-feedback {
+		display: block;
+	}
+}

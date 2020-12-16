@@ -5,24 +5,59 @@ const keys = require("../../config/keys");
 
 // Load User model
 const Lead = require("../../models/Lead");
+const CarMake = require("../../models/CarMake");
+const CarModel = require("../../models/CarModel");
+
+router.get("/get-car-makes", async (req, res) => {
+  try {
+    const carMakes = await CarMake.find({});
+    return res.json({
+      carMakes
+    });
+  } catch (error) {
+    return res.status(400).json({message: "Something went wrong!"});
+  }
+});
+
+router.get("/get-car-models", (req, res) => {
+  CarModel.find({ id_car_make: req.query.make }, function(err, docs) {
+    if (err)
+      return res.status(400).json({message: "Something went wrong!"});
+    return res.json({ carModels: docs });
+  });
+});
 
 router.get("/get", (req, res) => {
-  Lead.findById(req.query.id, function (err, doc) {
+  Lead.findById(req.query.id).populate("make").populate("model").exec(async (err, doc) => {
     if (err) {
       res.status(400).json({message: err})
     }
-    return res.json({ lead: doc });
+    let models = [];
+    let lead = doc;
+    if (doc.make) {
+      models = await CarModel.find({ id_car_make: doc.make.id_car_make });
+      lead.make = lead.make._id;
+    }
+    if (doc.model) lead.model = lead.model._id;
+    return res.json({ lead: doc, carModels: models });
   });
 });
 
 
 router.post("/create", (req, res) => {
   const newLead = new Lead({
-    ...req.body.lead
+    ...req.body.lead,
   });
   newLead.save()
-    .then((lead) => res.json({lead}))
-    .catch((err) => res.status(400).json({message: err}));
+    .then((doc) => {
+      Lead.findOne({_id: doc._id}).populate("make").populate("model").exec((err, lead) => {
+        return res.json({lead});
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json({message: err});
+    });
 });
 
 
@@ -33,9 +68,12 @@ router.post("/find", async (req, res) => {
     .skip(queryParams.pageSize * (queryParams.pageNumber - 1))
     .limit(queryParams.pageSize)
     .sort({ [queryParams.sortField]: -1 })
+    .populate('make')
+    .populate('model')
     .exec((err, docs) => {
-      if (err)
+      if (err) {
         return res.status(400).json({ message: "Something went wrong!" });
+      }
       return res.json({
         totalCount,
         entities: docs

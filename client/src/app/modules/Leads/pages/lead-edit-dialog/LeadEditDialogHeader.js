@@ -18,7 +18,7 @@ export function LeadEditDialogHeader({ id }) {
   useEffect(() => {
     let _title = id ? "" : "New Lead";
     if (leadForEdit && id) {
-      _title = `Edit lead '${leadForEdit.firstName} ${leadForEdit.lastName}'`;
+      _title = `Edit lead '${leadForEdit.name}'`;
     }
 
     setTitle(_title);

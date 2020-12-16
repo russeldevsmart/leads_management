@@ -18,7 +18,7 @@ export function Input({
   field, // { name, value, onChange, onBlur }
   form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
   label,
-  withFeedbackLabel = true,
+  withFeedbackLabel = false,
   customFeedbackLabel,
   type = "text",
   ...props

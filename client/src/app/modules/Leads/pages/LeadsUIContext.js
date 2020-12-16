@@ -36,13 +36,13 @@ export function LeadsUIProvider({leadsUIEvents, children}) {
     email: "",
     client_type: "",
     listing_link: "",
-    make: "",
-    model: "",
-    year: "",
-    mileage: "",
-    requested_price: "",
-    budget: "",
-    trade_in_budget: "",
+    make: null,
+    model: null,
+    year: 1990,
+    mileage: 0,
+    requested_price: 0,
+    budget: 0,
+    trade_in_budget: 0,
     status: "",
     request_type: "",
     request: "",
@@ -66,8 +66,6 @@ export function LeadsUIProvider({leadsUIEvents, children}) {
     openEditLeadDialog: leadsUIEvents.openEditLeadDialog,
     openDeleteLeadDialog: leadsUIEvents.openDeleteLeadDialog,
     openDeleteLeadsDialog: leadsUIEvents.openDeleteLeadsDialog,
-    openFetchLeadsDialog: leadsUIEvents.openFetchLeadsDialog,
-    openUpdateLeadsStatusDialog: leadsUIEvents.openUpdateLeadsStatusDialog
   };
 
   return <LeadsUIContext.Provider value={value}>{children}</LeadsUIContext.Provider>;

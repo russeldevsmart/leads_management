@@ -41,7 +41,7 @@ export function QuickUser() {
               className="symbol-label"
               style={{
                 backgroundImage: `url(${toAbsoluteUrl(
-                  "/media/users/300_21.jpg"
+                  "/media/users/default.jpg"
                 )})`,
               }}
             />

@@ -51,7 +51,7 @@ export function UserProfileDropdown() {
             <>
               <div className="d-flex align-items-center p-8 rounded-top">
                 <div className="symbol symbol-md bg-light-primary mr-3 flex-shrink-0">
-                  <img src={toAbsoluteUrl("/media/users/300_21.jpg")} alt="" />
+                  <img src={toAbsoluteUrl("/media/users/default.jpg")} alt="" />
                 </div>
                 <div className="text-dark m-0 flex-grow-1 mr-3 font-size-h5">
                   {user.firstname} {user.lastname}

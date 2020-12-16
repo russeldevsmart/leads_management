@@ -124,7 +124,7 @@ export function SearchResult({ data }) {
                   className="symbol-label"
                   style={{
                     backgroundImage: `url(${toAbsoluteUrl(
-                      "/media/users/300_20.jpg"
+                      "/media/users/default.jpg"
                     )})`,
                   }}
                 />
@@ -147,7 +147,7 @@ export function SearchResult({ data }) {
                   className="symbol-label"
                   style={{
                     backgroundImage: `url(${toAbsoluteUrl(
-                      "/media/users/300_15.jpg"
+                      "/media/users/default.jpg"
                     )}`,
                   }}
                 />
@@ -170,7 +170,7 @@ export function SearchResult({ data }) {
                   className="symbol-label"
                   style={{
                     backgroundImage: `url(${toAbsoluteUrl(
-                      "/media/users/300_12.jpg"
+                      "/media/users/default.jpg"
                     )})`,
                   }}
                 />
@@ -193,7 +193,7 @@ export function SearchResult({ data }) {
                   className="symbol-label"
                   style={{
                     backgroundImage: `url(${toAbsoluteUrl(
-                      "/media/users/300_16.jpg"
+                      "/media/users/default.jpg"
                     )})`,
                   }}
                 />

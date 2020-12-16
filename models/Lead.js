@@ -41,13 +41,15 @@ const LeadSchema = new Schema({
     type: String,
   },
   make: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "car_make",
   },
   model: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "car_model",
   },
   year: {
-    type: String,
+    type: Number,
   },
   mileage: {
     type: Number,
@@ -56,10 +58,10 @@ const LeadSchema = new Schema({
     type: Number,
   },
   budget: {
-    type: String
+    type: Number
   },
   trade_in_budget: {
-    type: String,
+    type: Number,
   },
   status: {
     type: String,

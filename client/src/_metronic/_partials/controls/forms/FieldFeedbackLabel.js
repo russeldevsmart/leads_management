@@ -48,6 +48,10 @@ export function FieldFeedbackLabel({
   switch (type) {
     case "text":
       return inputLabel({ label, touched, error, customFeedbackLabel });
+    case "tel":
+      return inputLabel({ label, touched, error, customFeedbackLabel });
+    case "number":
+      return inputLabel({ label, touched, error, customFeedbackLabel });
     case "textarea":
       return inputLabel({ label, touched, error, customFeedbackLabel });
     case "email":
