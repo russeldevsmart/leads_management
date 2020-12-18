@@ -23,10 +23,14 @@ const LeadSchema = new Schema({
     default: Date.now
   },
   created_by: {
-    type: String
+    type: Schema.Types.ObjectId,
+    ref: "users",
+    required: true,
   },
   edited_by: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "users",
+    required: true,
   },
   phone: {
     type: String,

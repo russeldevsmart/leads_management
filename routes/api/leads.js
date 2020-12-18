@@ -1,6 +1,7 @@
 const { query } = require("express");
 const express = require("express");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
 
 // Load User model
@@ -45,12 +46,25 @@ router.get("/get", (req, res) => {
 
 
 router.post("/create", (req, res) => {
+
+  const authorization = req.headers.authorization.split(' ')[1];
+  let decoded;
+  try {
+    decoded = jwt.verify(authorization, keys.secretOrKey);
+  } catch (e) {
+    return res.status(401).send('unauthorized');
+  }
+
   const newLead = new Lead({
     ...req.body.lead,
+    created_by: decoded.id,
+    created_on: new Date(),
+    edited_by: decoded.id,
+    edited_on: new Date()
   });
   newLead.save()
     .then((doc) => {
-      Lead.findOne({_id: doc._id}).populate("make").populate("model").exec((err, lead) => {
+      Lead.findOne({_id: doc._id}).populate("make").populate("model").populate("edited_by").exec((err, lead) => {
         return res.json({lead});
       });
     })
@@ -70,6 +84,7 @@ router.post("/find", async (req, res) => {
     .sort({ [queryParams.sortField]: -1 })
     .populate('make')
     .populate('model')
+    .populate('edited_by')
     .exec((err, docs) => {
       if (err) {
         return res.status(400).json({ message: "Something went wrong!" });
@@ -83,13 +98,24 @@ router.post("/find", async (req, res) => {
 
 
 router.post("/update", async (req, res) => {
+  const authorization = req.headers.authorization.split(' ')[1];
+  let decoded;
+  try {
+    decoded = jwt.verify(authorization, keys.secretOrKey);
+  } catch (e) {
+    return res.status(401).send('unauthorized');
+  }
+
   const { lead } = req.body;
   Lead.findOneAndUpdate({ _id: lead._id }, {
     $set: {
-      ...lead
+      ...lead,
+      edited_on: new Date(),
+      edited_by: decoded.id,
     }
-  }, function (err, doc) {
-    return res.json(doc);
+  }, async function (err, doc) {
+    const updatedLead = await Lead.findOne({_id: doc._id}).populate("make").populate("model").populate("edited_by");
+    return res.json(updatedLead);
   });
 });
 

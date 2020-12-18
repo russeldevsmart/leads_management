@@ -1,7 +1,3 @@
-// Form is based on Formik
-// Data validation is based on Yup
-// Please, be familiar with article first:
-// https://hackernoon.com/react-form-validation-with-formik-and-yup-8b76bda62e10
 import React , { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
@@ -17,12 +13,21 @@ import {
   NumberInput,
   PhoneNumberInput
 } from "../../../../../_metronic/_partials/controls";
-import { categories, categoryColumns, years } from "../../constants";
+import { categories, categoryColumns, years, clientList, statusList } from "../../constants";
 
 // Field types
 const dateFields = ["inspection_date", "service_date", "verification_date"];
-const selectFields = ["make", "model"];
-const numberFields = ["trade_in_budget", "requested_price", "budget", "mileage"]
+const selectFields = ["make", "model", "status"];
+const numberFields = ["trade_in_budget", "requested_price", "budget", "mileage"];
+
+// Custom React-Select Option Label
+const colorOptionLabel = ({ value, label, color }) => (
+  <div className="d-flex align-items-center">
+    <div className={`mr-2 bg-${color}`} style={{width: '20px', height: '20px', borderRadius: '50%'}}>
+    </div>
+    <div>{label}</div>
+  </div>
+);
 
 export function LeadEditForm({
   saveLead,
@@ -59,8 +64,7 @@ export function LeadEditForm({
     name: Yup.string()
       .required("Name is required"),
     email: Yup.string()
-      .email("Invalid email")
-      .required("Email is required"),
+      .email("Invalid email"),
   });
 
   const handleChangeCategory = (e) => {
@@ -159,7 +163,7 @@ export function LeadEditForm({
                     <PhoneNumberInput
                       name="phone"
                       label="phone"
-                      country="CI"
+                      country="ci"
                       placeholder="Phone"
                       value={phoneNumber}
                       onChange={handlePhoneInput}
@@ -233,6 +237,18 @@ export function LeadEditForm({
                           </div>
                         )
                       }
+                      else if (selectFields.includes(column) && column === 'status') {
+                        return (
+                          <div className="col-lg-4 mb-6" key={index}>
+                            <SearchSelect
+                              name={column}
+                              label={label}
+                              options={statusList}
+                              formatOptionLabel={colorOptionLabel}
+                            />
+                          </div>
+                        )
+                      }
                       else if (numberFields.includes(column)) {
                         return (
                           <div className="col-lg-4 mb-6" key={index}>
@@ -242,6 +258,7 @@ export function LeadEditForm({
                               component={NumberInput}
                               placeholder={label}
                               label={label}
+                              suffix={column === 'mileage' ? " KM" : " CFA"}
                             />
                           </div>
                         )
@@ -267,12 +284,10 @@ export function LeadEditForm({
                 <div className="form-group row">
                   {/* Client Type */}
                   <div className="col-lg-4">
-                    <Field
-                      type="text"
+                    <SearchSelect
                       name="client_type"
-                      component={Input}
-                      placeholder="Client Type"
                       label="Client Type"
+                      options={clientList}
                     />
                   </div>
                   {/* Comments */}

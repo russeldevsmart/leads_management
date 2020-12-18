@@ -54,120 +54,50 @@ export function LeadsTable() {
   // Table columns
   const columns = [
     {
-      dataField: "name",
-      text: "Name",
+      dataField: "lead_details",
+      text: "LEAD DETAILS",
       sort: true,
       sortCaret: sortCaret,
       headerSortingClasses,
+      formatter: columnFormatters.LeadDetailsColumnFormatter
     },
     {
-      dataField: "comments",
-      text: "Comments",
+      dataField: "interest_details",
+      text: "INTEREST DETAILS",
       sort: true,
       sortCaret: sortCaret,
       headerSortingClasses,
+      formatter: columnFormatters.InterestDetailsColumnFormatter
     },
     {
-      dataField: "phone",
-      text: "Phone",
+      dataField: "budget",
+      text: "BUDGET",
       sort: true,
       sortCaret: sortCaret,
       headerSortingClasses,
+      formatter: columnFormatters.BudgetColumnFormatter
     },
     {
-      dataField: "email",
-      text: "Email",
+      dataField: "last_action",
+      text: "LAST ACTION",
       sort: true,
       sortCaret: sortCaret,
       headerSortingClasses,
+      formatter: columnFormatters.LastActionColumnFormatter
     },
     {
-      dataField: "client_type",
-      text: "Client Type",
+      dataField: "source",
+      text: "SOURCE",
       sort: false,
       sortCaret: sortCaret,
     },
     {
-      dataField: "listing_link",
-      text: "Listing Link",
+      dataField: "status",
+      text: "STATUS",
       sort: true,
       sortCaret: sortCaret,
       headerSortingClasses,
-    },
-    {
-      dataField: "make.name",
-      text: "Make",
-      sort: true,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-    },
-    {
-      dataField: "model.name",
-      text: "Model",
-      sort: true,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-    },
-    {
-      dataField: "year",
-      text: "Year",
-      sort: true,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-    },
-    {
-      dataField: "mileage",
-      text: "Mileage",
-      sort: true,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-    },
-    {
-      dataField: "request",
-      text: "Request",
-      sort: true,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-    },
-    {
-      dataField: "requested_price",
-      text: "Requested Price",
-      sort: true,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-    },
-    {
-      dataField: "source",
-      text: "Source",
-      sort: true,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-    },
-    {
-      dataField: "service",
-      text: "Service",
-      sort: true,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-    },
-    {
-      dataField: "service_date",
-      text: "Service Date",
-      sort: true,
-    },
-    {
-      dataField: "budget",
-      text: "Budget",
-      sort: true,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-    },
-    {
-      dataField: "trrade_in_budget",
-      text: "Trade In Budget",
-      sort: true,
-      sortCaret: sortCaret,
-      headerSortingClasses,
+      formatter: columnFormatters.StatusColumnFormatter
     },
     {
       dataField: "action",
@@ -204,7 +134,7 @@ export function LeadsTable() {
               <BootstrapTable
                 wrapperClasses="table-responsive"
                 bordered={false}
-                classes="table table-head-custom table-vertical-center overflow-hidden"
+                classes="table table-head-custom table-vertical-top overflow-hidden"
                 bootstrap4
                 remote
                 keyField="_id"

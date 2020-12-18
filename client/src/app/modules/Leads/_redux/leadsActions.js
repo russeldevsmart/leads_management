@@ -94,8 +94,8 @@ export const updateLead = lead => dispatch => {
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .updateLead(lead)
-    .then(() => {
-      dispatch(actions.leadUpdated({ lead }));
+    .then((res) => {
+      dispatch(actions.leadUpdated({lead: res.data}));
     })
     .catch(error => {
       error.clientMessage = "Can't update lead";

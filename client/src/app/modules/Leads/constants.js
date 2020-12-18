@@ -19,6 +19,22 @@ export const categoryColumns = {
   "used_cars": ["listing_link", "make", "model", "budget", "status"],
   "verification": ["make", "model", "year", "mileage", "listing_link", "status", "verification_date"]
 };
+export const years = [2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011, 2010, 2009, 2008, 2007, 2006, 2005, 2004, 2003, 2002, 2001, 2000, 
+  1999, 1998, 1997, 1996, 1995, 1994, 1993, 1992, 1991, 1990];
 
-export const years = [ 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 
-  2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 ];
+export const clientList = [
+  { label: "Particulier", value: "Particulier", _id: "Particulier" },
+  { label: "Professionnel", value: "Professionnel", _id: "Professionnel" }, 
+  { label: "Revendeur", value: "Revendeur", _id: "Revendeur" }
+];
+
+export const statusList = [
+  { label: "Nouveau", value: "Nouveau", _id: "Nouveau", color: "primary" },
+  { label: "Froid", value: "Froid", _id: "Froid", color: "light-primary" }, 
+  { label: "Tiède", value: "Tiède", _id: "Tiède", color: "success" },
+  { label: "Chaud", value: "Chaud", _id: "Chaud", color: "info" },
+  { label: "RDV", value: "RDV", _id: "RDV", color: "warning" },
+  { label: "Transmis", value: "Transmis", _id: "Transmis", color: "danger" },
+  { label: "Gagné", value: "Gagné", _id: "Gagné", color: "light" },
+  { label: "Perdu", value: "Perdu", _id: "Perdu", color: "dark" },
+];
