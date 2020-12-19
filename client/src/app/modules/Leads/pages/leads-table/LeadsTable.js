@@ -67,7 +67,10 @@ export function LeadsTable() {
       sort: true,
       sortCaret: sortCaret,
       headerSortingClasses,
-      formatter: columnFormatters.InterestDetailsColumnFormatter
+      formatter: columnFormatters.InterestDetailsColumnFormatter,
+      style: {
+        minWidth: "300px",
+      },
     },
     {
       dataField: "budget",
@@ -90,6 +93,9 @@ export function LeadsTable() {
       text: "SOURCE",
       sort: false,
       sortCaret: sortCaret,
+      style: {
+        minWidth: "100px",
+      },
     },
     {
       dataField: "status",

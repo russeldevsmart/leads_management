@@ -5,8 +5,12 @@ import React from "react";
 export function InterestDetailsColumnFormatter(cellContent, row) {
   return (
     <div className="d-flex flex-column">
-      <span className="label label-lg label-light-success label-inline mb-4">{row.make.name}</span>
+      <div>
+        <span className="label label-lg label-light-success label-inline mb-4">{row.make.name}</span>
+      </div>
+      <div>
       <span className="label label-lg label-light-primary label-inline">{row.model.name}</span>
+      </div>
     </div>
   );
 }
