@@ -25,7 +25,7 @@ export function Input({
 }) {
   return (
     <>
-      {label && <label>Enter {label}</label>}
+      {/* {label && <label>Enter {label}</label>} */}
       {
         type !== 'textarea' ? (
           <input

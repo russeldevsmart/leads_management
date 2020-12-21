@@ -20,8 +20,9 @@ router.get("/get-car-makes", async (req, res) => {
   }
 });
 
-router.get("/get-car-models", (req, res) => {
-  CarModel.find({ id_car_make: req.query.make }, function(err, docs) {
+router.post("/get-car-models", (req, res) => {
+  const { makeIds } = req.body;
+  CarModel.find({ id_car_make: { $in: makeIds } }, function(err, docs) {
     if (err)
       return res.status(400).json({message: "Something went wrong!"});
     return res.json({ carModels: docs });
@@ -35,11 +36,14 @@ router.get("/get", (req, res) => {
     }
     let models = [];
     let lead = doc;
-    if (doc.make) {
-      models = await CarModel.find({ id_car_make: doc.make.id_car_make });
-      lead.make = lead.make._id;
-    }
-    if (doc.model) lead.model = lead.model._id;
+    if (doc.make && doc.make.length > 0) {
+      const makeIds = doc.make.map((m) => m.id_car_make);
+      models = await CarModel.find({ id_car_make: { $in: makeIds } });
+      lead.make = doc.make.map((m) => m._id);
+    } else lead.make = [];
+    if (doc.model && doc.model.length > 0) {
+      lead.model = doc.model.map((m) => m._id);
+    } else lead.model = [];
     return res.json({ lead: doc, carModels: models });
   });
 });
@@ -54,13 +58,21 @@ router.post("/create", (req, res) => {
   } catch (e) {
     return res.status(401).send('unauthorized');
   }
-
+  const { comments } = req.body.lead;
+  let commentList = [];
+  if (comments !== "")
+    commentList.push({
+      content: comments,
+      created_by: decoded.id,
+      created_on: new Date(),
+    });
   const newLead = new Lead({
     ...req.body.lead,
     created_by: decoded.id,
     created_on: new Date(),
     edited_by: decoded.id,
-    edited_on: new Date()
+    edited_on: new Date(),
+    comments: commentList
   });
   newLead.save()
     .then((doc) => {
@@ -107,16 +119,34 @@ router.post("/update", async (req, res) => {
   }
 
   const { lead } = req.body;
-  Lead.findOneAndUpdate({ _id: lead._id }, {
-    $set: {
-      ...lead,
-      edited_on: new Date(),
-      edited_by: decoded.id,
-    }
-  }, async function (err, doc) {
-    const updatedLead = await Lead.findOne({_id: doc._id}).populate("make").populate("model").populate("edited_by");
-    return res.json(updatedLead);
-  });
+  const setQuery = {
+    ...lead,
+    'edited_on': new Date(),
+    'edited_by': decoded.id,
+  };
+  delete setQuery.comments;
+  if (lead.comments === "") {
+    Lead.findOneAndUpdate({ _id: lead._id }, { $set: setQuery }, async function (err, doc) {
+      if (err) console.log(err);
+      const updatedLead = await Lead.findOne({_id: doc._id}).populate("make").populate("model").populate("edited_by");
+      return res.json(updatedLead);
+    });
+  } else {
+    Lead.findOneAndUpdate({ _id: lead._id }, {
+      $push: {
+        "comments": {
+          created_on: new Date(),
+          created_bY: decoded.id,
+          content: lead.comments,
+        }
+      },
+      $set: setQuery
+    }, { upsert: true }, async function (err, doc) {
+      if (err) console.log(err);
+      const updatedLead = await Lead.findOne({_id: doc._id}).populate("make").populate("model").populate("edited_by");
+      return res.json(updatedLead);
+    });
+  }
 });
 
 

@@ -43,6 +43,6 @@ export function getCarMakes() {
 }
 
 // Get Car Models
-export function getCarModels(makeId) {
-  return axios.get(`${LEADS_URL}/get-car-models?make=${makeId}`);
+export function getCarModels(makeIds) {
+  return axios.post(`${LEADS_URL}/get-car-models`, { makeIds });
 }

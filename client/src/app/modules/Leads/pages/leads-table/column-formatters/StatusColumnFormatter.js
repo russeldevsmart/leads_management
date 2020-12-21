@@ -5,7 +5,9 @@ import { statusList } from "../../../constants";
 
 export function StatusColumnFormatter(cellContent, row) {
   const index = statusList.findIndex((el) => el.label === row.status);
-  return (
-    <span className={`label label-inline label-lg label-${statusList[index].color}`}>{row.status}</span>
-  )
+  if (index !== -1) {
+    return (
+      <span className={`label label-inline label-lg label-${statusList[index].color}`}>{row.status}</span>
+    )
+  } else { return ( <></> ) }
 }

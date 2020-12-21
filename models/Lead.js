@@ -9,11 +9,12 @@ const LeadSchema = new Schema({
   },
   category_type: {
     type: String,
-    required: true,
   },
-  comments: {
-    type: String,
-  },
+  comments: [{
+    created_on: { type: Date, defualt: Date.now },
+    created_by: { type: Schema.Types.ObjectId, ref: "users" },
+    content: { type: String }
+  }],
   created_on: {
     type: Date,
     default: Date.now
@@ -44,14 +45,14 @@ const LeadSchema = new Schema({
   listing_link: {
     type: String,
   },
-  make: {
+  make: [{
     type: Schema.Types.ObjectId,
     ref: "car_make",
-  },
-  model: {
+  }],
+  model: [{
     type: Schema.Types.ObjectId,
     ref: "car_model",
-  },
+  }],
   year: {
     type: Number,
   },

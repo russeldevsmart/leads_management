@@ -8,16 +8,15 @@ import axios from "axios";
 import {
   Input,
   SearchSelect,
-  Select,
-  DatePickerField,
   NumberInput,
   PhoneNumberInput
 } from "../../../../../_metronic/_partials/controls";
-import { categories, categoryColumns, years, clientList, statusList } from "../../constants";
+import * as uiHelpers from "../LeadsUIHelpers";
+import { statusList } from "../../constants";
 
 // Field types
-const dateFields = ["inspection_date", "service_date", "verification_date"];
-const selectFields = ["make", "model", "status"];
+// const dateFields = ["inspection_date", "service_date", "verification_date"];
+// const selectFields = ["make", "model", "status"];
 const numberFields = ["trade_in_budget", "requested_price", "budget", "mileage"];
 
 // Custom React-Select Option Label
@@ -46,15 +45,16 @@ export function LeadEditForm({
     shallowEqual
   );
 
-  const [ category, setCategory ] = useState("buy_cash");
+  // const [ category, setCategory ] = useState("buy_cash");
   const [ phoneValid, setPhoneValid ] = useState("NOTHING");
   const [ typingTimeout, setTypingTimeout ] = useState(null);
   const [ phoneLoading, setPhoneLoading ] = useState(false);
   const [ phoneNumber, setPhoneNumber ] = useState("");
+  const [ comment, setComment ] = useState("");
 
   useEffect(() => {
     if (lead._id) {
-      setCategory(lead.category_type);
+      // setCategory(lead.category_type);
       setPhoneNumber(lead.phone);
     }
   }, [lead]);
@@ -67,12 +67,17 @@ export function LeadEditForm({
       .email("Invalid email"),
   });
 
-  const handleChangeCategory = (e) => {
-    setCategory(e.target.value);
+  // const handleChangeCategory = (e) => {
+  //   setCategory(e.target.value);
+  // }
+
+  const handleCommentChange = (e) => {
+    setComment(e.target.value);
   }
 
-  const handleMakeChange = (option) => {
-    dispatch(actions.fetchCarModels(option.value));
+  const handleMakeChange = (options) => {
+    const makeIds = options.map((option) => { return option.value });
+    dispatch(actions.fetchCarModels(makeIds));
   }
 
   const handlePhoneInput = async (phone) => {
@@ -99,7 +104,7 @@ export function LeadEditForm({
           setPhoneLoading(false);
           setPhoneValid("INVALID");
         }
-      }, 1000)
+      }, 800)
     )
   }
 
@@ -110,7 +115,7 @@ export function LeadEditForm({
       if (typeof newValues[elem] === "string")
         newValues[elem] = parseFloat(newValues[elem].replaceAll(",", ""));
     });
-    saveLead({...newValues, category_type: category, phone: phoneNumber});
+    saveLead({...newValues, phone: phoneNumber, comments: comment});
   }
 
   return (
@@ -120,7 +125,7 @@ export function LeadEditForm({
         initialValues={lead}
         validationSchema={LeadEditSchema}
         onSubmit={(values) => {
-          if (phoneValid === "INVALID") return;
+          if (phoneValid === "INVALID" || phoneLoading === true) return;
           createLead(values);
         }}
       >
@@ -132,194 +137,151 @@ export function LeadEditForm({
                   <div className="spinner spinner-lg spinner-success" />
                 </div>
               )}
-              <Form className="form form-label-right">
-                <div className="form-group row">
-                  {/* Category */}
-                  <div className="col-lg-4">
-                    <Select name="category" label="Category" onChange={handleChangeCategory} value={category} >
+              <div className="row">
+                <div className="col-md-6 border-right-primary border-right-md px-md-10">
+                  <Form className="form form-label-right">
+                    {/* <div className="form-group">
+                      Category
+                      <Select name="category" label="Category" onChange={handleChangeCategory} value={category} >
+                        {
+                          categories && categories.map((cat, index) => {
+                            return (
+                              <option value={cat.value} key={index}>{cat.name}</option>
+                            )
+                          })
+                        }
+                      </Select>
+                    </div> */}
+                    <label className="text-primary font-weight-bolder">LEAD DETAILS:</label>
+                    <div className="form-group">
+                      {/* Name */}
+                      <Field
+                        name="name"
+                        component={Input}
+                        placeholder="Name"
+                        label="Name"
+                        withFeedbackLabel={true}
+                      />
+                    </div>
+                    <div className="form-group position-relative">
+                      {/* Phone */}
+                        <PhoneNumberInput
+                          name="phone"
+                          label="Phone Number"
+                          country="ci"
+                          placeholder="Phone"
+                          value={phoneNumber}
+                          onChange={handlePhoneInput}
+                          isValid={phoneValid}
+                          customFeedbackLabel={"Wrong format!"}
+                          loading={phoneLoading}
+                        />
+                    </div>
+                    <div className="form-group">
+                      {/* Email */}
+                      <Field
+                        type="email"
+                        name="email"
+                        component={Input}
+                        placeholder="Email"
+                        label="Email"
+                        withFeedbackLabel={true}
+                      />
+                    </div>
+                    <label className="text-primary font-weight-bolder">INTEREST DETAILS:</label>
+                    <div className="form-group">
+                      {/* Make */}
+                      <SearchSelect
+                        name="make"
+                        label="Make"
+                        isMulti={true}
+                        options={makes}
+                        changeFunc={handleMakeChange}
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      {/* Model */}
+                      <SearchSelect
+                        name="model"
+                        label="Model"
+                        isMulti={true}
+                        options={models}
+                      />
+                    </div>
+                    <div className="form-group">
+                      {/* Budget */}
+                      <Field
+                        type="number"
+                        name="budget"
+                        component={NumberInput}
+                        placeholder="Budget"
+                        label="Budget"
+                        suffix=" CFA"
+                      />
+                    </div>
+                    <label className="text-primary font-weight-bolder">STATUS DETAILS:</label>
+                    <div className="form-group">
+                      {/* Status */}
+                        <SearchSelect
+                          name="status"
+                          label="Status"
+                          options={statusList}
+                          formatOptionLabel={colorOptionLabel}
+                        />
+                    </div>
+                    <div className="form-group">
+                      {/* Source */}
+                      <Field
+                        name="source"
+                        component={Input}
+                        placeholder="Source"
+                        label="Source"
+                        withFeedbackLabel={true}
+                      />
+                    </div>
+                    <div className="form-group mb-0">
+                      <button
+                        className="btn btn-block btn-primary"
+                        onClick={(e) => { e.preventDefault(); handleSubmit() }}>
+                          SAVE CHANGES
+                      </button>
+                    </div>
+                  </Form>
+                </div>
+                <div className="col-md-6 border-left-primary border-left-md px-md-10">
+                  <div className="d-flex flex-column justify-content-between h-100">
+                    <div className="timeline timeline-2">
+                      <div className="timeline-bar"></div>
                       {
-                        categories && categories.map((cat, index) => {
+                        lead.comments && lead.comments.length > 0 && lead.comments.map((comment, index) => {
                           return (
-                            <option value={cat.value} key={index}>{cat.name}</option>
+                            <div className="timeline-item" key={index}>
+                              <div className={`timeline-badge ${uiHelpers.timelineColors[Math.floor(Math.random() * 100) % 6]}`}></div>
+                              <div className="timeline-content d-flex align-items-center justify-content-between">
+                                  <span className="mr-3">
+                                    {comment.content}
+                                  </span>
+                                  <span className="text-muted text-right">{uiHelpers.getTimeSince(comment.created_on)}</span>
+                              </div>
+                          </div>
                           )
                         })
                       }
-                    </Select>
+                    </div>
+                    <form>
+                      <div className="form-group">
+                        <textarea rows={5} name="comment" className="form-control" placeholder="Comments..." value={comment} onChange={handleCommentChange}>
+                        </textarea>
+                      </div>
+                      <div className="form-group mb-0">
+                        <button className="btn btn-block btn-outline-success" onClick={(e) => { e.preventDefault(); handleSubmit(); } }>ADD A COMMENT</button>
+                      </div>
+                    </form>
                   </div>
                 </div>
-                <div className="form-group row">
-                  {/* Name */}
-                  <div className="col-lg-4 mb-5">
-                    <Field
-                      name="name"
-                      component={Input}
-                      placeholder="Name"
-                      label="Name"
-                      withFeedbackLabel={true}
-                    />
-                  </div>
-                  {/* Phone */}
-                  <div className="col-lg-4 mb-5">
-                    <PhoneNumberInput
-                      name="phone"
-                      label="phone"
-                      country="ci"
-                      placeholder="Phone"
-                      value={phoneNumber}
-                      onChange={handlePhoneInput}
-                      isValid={phoneValid}
-                      customFeedbackLabel={"Wrong format!"}
-                      loading={phoneLoading}
-                    />
-                  </div>
-                  {/* Email */}
-                  <div className="col-lg-4 mb-5">
-                    <Field
-                      type="email"
-                      name="email"
-                      component={Input}
-                      placeholder="Email"
-                      label="Email"
-                      withFeedbackLabel={true}
-                    />
-                  </div>
-                </div>
-                <div className="form-group row mb-1">
-                {
-                  categoryColumns[category].length > 0 && (
-                    categoryColumns[category].map((column, index) => {
-                      const label = column.charAt(0).toUpperCase() + column.replaceAll('_', ' ').slice(1);
-                      if (column === 'year') {
-                        return (
-                          <div className="col-lg-4 mb-6" key={index}>
-                            <Select name={column} label={label}>
-                              {
-                                years && years.map((year, index) => {
-                                  return (
-                                    <option value={year} key={index}>{year}</option>
-                                  )
-                                })
-                              }
-                            </Select>
-                          </div>
-                        )
-                      }
-                      else if (dateFields.includes(column)) {
-                        return (
-                          <div className="col-lg-4 mb-6" key={index}>
-                            <DatePickerField
-                              name={column}
-                              label={label}
-                            />
-                          </div>
-                        )
-                      }
-                      else if (selectFields.includes(column) && column === 'make') {
-                        return (
-                          <div className="col-lg-4 mb-6" key={index}>
-                            <SearchSelect
-                              name={column}
-                              label={label}
-                              options={makes}
-                              changeFunc={handleMakeChange}
-                            />
-                          </div>
-                        )
-                      }
-                      else if (selectFields.includes(column) && column === 'model') {
-                        return (
-                          <div className="col-lg-4 mb-6" key={index}>
-                            <SearchSelect
-                              name={column}
-                              label={label}
-                              options={models}
-                            />
-                          </div>
-                        )
-                      }
-                      else if (selectFields.includes(column) && column === 'status') {
-                        return (
-                          <div className="col-lg-4 mb-6" key={index}>
-                            <SearchSelect
-                              name={column}
-                              label={label}
-                              options={statusList}
-                              formatOptionLabel={colorOptionLabel}
-                            />
-                          </div>
-                        )
-                      }
-                      else if (numberFields.includes(column)) {
-                        return (
-                          <div className="col-lg-4 mb-6" key={index}>
-                            <Field
-                              type="number"
-                              name={column}
-                              component={NumberInput}
-                              placeholder={label}
-                              label={label}
-                              suffix={column === 'mileage' ? " KM" : " CFA"}
-                            />
-                          </div>
-                        )
-                      }
-                      else {
-                        return (
-                          <div className="col-lg-4 mb-6" key={index}>
-                            <Field
-                              type="text"
-                              name={column}
-                              component={Input}
-                              placeholder={label}
-                              label={label}
-                            />
-                          </div>
-                        )
-                      }
-                    })
-                  )
-                }
-                </div>
-
-                <div className="form-group row">
-                  {/* Client Type */}
-                  <div className="col-lg-4">
-                    <SearchSelect
-                      name="client_type"
-                      label="Client Type"
-                      options={clientList}
-                    />
-                  </div>
-                  {/* Comments */}
-                  <div className="col-lg-8">
-                    <Field
-                      type="textarea"
-                      name="comments"
-                      component={Input}
-                      placeholder="Comments"
-                      label="Comments"
-                    />
-                  </div>
-                </div>
-              </Form>
+              </div>
             </Modal.Body>
-            <Modal.Footer>
-              <button
-                type="button"
-                onClick={onHide}
-                className="btn btn-light btn-elevate"
-              >
-                Cancel
-              </button>
-              <> </>
-              <button
-                type="submit"
-                onClick={() => handleSubmit()}
-                className="btn btn-primary btn-elevate"
-              >
-                Save
-              </button>
-            </Modal.Footer>
           </>
         )}
       </Formik>

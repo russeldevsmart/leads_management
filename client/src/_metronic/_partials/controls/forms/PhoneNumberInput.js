@@ -26,7 +26,7 @@ export function PhoneNumberInput({
 }) {
   return (
     <>
-      {label && <label>{label}</label>}
+      {/* {label && <label>{label}</label>} */}
       <PhoneInput
         autoFormat={true}
         specialLabel=" "
@@ -44,8 +44,8 @@ export function PhoneNumberInput({
             size="sm" 
             style={{
               position: 'absolute',
-              right: '20px',
-              top: '36px'
+              right: '10px',
+              top: '12px'
             }}
           />
         )

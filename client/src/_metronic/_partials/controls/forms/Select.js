@@ -16,6 +16,17 @@ const getFieldCSSClasses = (touched, errors) => {
   return classes.join(" ");
 };
 
+const getSelectValues = (isMulti, options, fieldValue) => {
+  if (!options) return null;
+  if (isMulti === true) {
+    if (fieldValue && fieldValue.length > 0) {
+      return options.filter(option => fieldValue.includes(option._id));
+    }
+    else return null;
+  } else
+    return options.find(option => option._id === fieldValue);
+}
+
 export function Select({
   label,
   withFeedbackLabel = true,
@@ -53,16 +64,28 @@ export function SearchSelect({ ...props }) {
   const [field] = useField(props);
   return (
     <>
-      {props.label && <label>Select {props.label}</label>}
+      {/* {props.label && <label>Select {props.label}</label>} */}
       <CustomSelect
         {...props}
-        value={props.options ? props.options.find(option => option._id === field.value) : null}
+        value={getSelectValues(props.isMulti, props.options, field.value)}
         onChange={option => {
           if (props.changeFunc)
             props.changeFunc(option);
-          setFieldValue(field.name, option._id);
+          if (props.isMulti === true) {
+            const ids = option.map((o) => { return o._id });
+            setFieldValue(field.name, ids);
+          } else {
+            setFieldValue(field.name, option._id)
+          }
         }}
       />
+      <div className="feedback">
+        {props.label && (
+          <>
+            Please select <b>{props.label}</b>
+          </>
+        )}
+      </div>
     </>
   );
 };

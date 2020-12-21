@@ -5,11 +5,19 @@ import React from "react";
 export function InterestDetailsColumnFormatter(cellContent, row) {
   return (
     <div className="d-flex flex-column">
-      <div>
-        <span className="label label-lg label-light-success label-inline mb-4">{row.make.name}</span>
+      <div className="d-flex flex-wrap">
+        {
+          row.make && row.make.length > 0 && row.make.map((m, index) => (
+            <span className="label label-lg label-light-success label-inline mb-4 mr-2" key={index}>{m.name}</span>
+          ))
+        }
       </div>
-      <div>
-      <span className="label label-lg label-light-primary label-inline">{row.model.name}</span>
+      <div className="d-flex flex-wrap">
+        {
+          row.model && row.model.length > 0 && row.model.map((m, index) => (
+            <span className="label label-lg label-outline-primary label-inline mr-2" key={index}>{m.name}</span>
+          ))
+        }
       </div>
     </div>
   );

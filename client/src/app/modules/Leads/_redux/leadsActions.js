@@ -17,10 +17,10 @@ export const fetchCarMakes = () => dispatch => {
     });
 }
 
-export const fetchCarModels = (makeId) => dispatch => {
+export const fetchCarModels = (makeIds) => dispatch => {
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .getCarModels(makeId)
+    .getCarModels(makeIds)
     .then(response => {
       const { carModels } = response.data;
       dispatch(actions.modelsFetched({ carModels }));

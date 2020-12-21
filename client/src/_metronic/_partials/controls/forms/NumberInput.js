@@ -20,7 +20,7 @@ export function NumberInput({
   field, // { name, value, onChange, onBlur }
   form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
   label,
-  withFeedbackLabel = false,
+  withFeedbackLabel = true,
   customFeedbackLabel,
   type = "number",
   ...props
@@ -28,7 +28,7 @@ export function NumberInput({
   const { setFieldValue } = useFormikContext();
   return (
     <>
-      {label && <label>{label}</label>}
+      {/* {label && <label>{label}</label>} */}
       <NumberFormat
         thousandSeparator={true}
         className={getFieldCSSClasses(touched[field.name], errors[field.name])}
