@@ -26,7 +26,7 @@ router.get("/get-dashboard-info", async (req, res) => {
   const newLeads = await Lead.count({status: "Nouveau"});
   const ongoingLeads = await Lead.count({status: { $nin: ["Nouveau", "Perdu"] }});
   const lastActions = await Action.find({date: {$gte: start, $lt: end}}).sort({ date: -1 }).populate("lead").populate("user");
-  const topLead = lastActions && lastActions[0].length > 1 ? lastActions[0].user.fullname : null;
+  const topLead = lastActions && lastActions.length > 1 ? lastActions[0].user.fullname : null;
 
   // last 7 days chart data
   const date = new Date();
