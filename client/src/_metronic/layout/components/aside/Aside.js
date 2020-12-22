@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useLocation } from "react-router";
 import { NavLink } from "react-router-dom";
 import objectPath from "object-path";
@@ -53,6 +53,16 @@ export function Aside() {
       ),
     };
   }, [uiService]);
+
+  useEffect(() => {
+    document.body.classList.remove("aside-secondary-enabled");
+    document.body.classList.remove("aside-secondary-disabled");
+    if (checkIsActive(location, "/leads")) {   
+      document.body.classList.add("aside-secondary-enabled");
+    } else {
+      document.body.classList.add("aside-secondary-disabled"); 
+    }
+  }, [checkIsActive(location, "/leads")]);
   
   const getMenuItemActive = (url, hasSubmenu = false) => {
     return checkIsActive(location, url)
@@ -122,7 +132,7 @@ export function Aside() {
                     overlay={<Tooltip id="toggle-aside">Toggle Aside</Tooltip>}
                   >
                     <span
-                      className="aside-toggle btn btn-icon btn-primary btn-hover-primary shadow-sm"
+                      className={`aside-toggle btn btn-icon btn-primary btn-hover-primary shadow-sm ${checkIsActive(location, "/leads") ? "" : "d-none"}`}
                       id="kt_aside_toggle"
                     >
                       <i className="ki ki-bold-arrow-back icon-sm" />
@@ -143,7 +153,7 @@ export function Aside() {
         </div>
         {/* end::Primary */}
 
-        {layoutProps.asideSecondaryDisplay && (
+        {layoutProps.asideSecondaryDisplay && checkIsActive(location, "/leads") && (
           <>
             {/* begin::Secondary */}
             <div className="aside-secondary d-flex flex-row-fluid">

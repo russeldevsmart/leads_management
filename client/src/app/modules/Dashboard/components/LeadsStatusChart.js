@@ -61,6 +61,20 @@ function getChartOption(leadStatuChartData) {
     chart: {
       width: 380,
       type: 'pie',
+      toolbar: {
+        show: true,
+        offsetX: 0,
+        offsetY: 0,
+        tools: {
+          download: true,
+          selection: false,
+          zoom: false,
+          zoomin: false,
+          zoomout: false,
+          pan: false,
+          reset: false,
+        },
+      },
     },
     labels: label,
     responsive: [{

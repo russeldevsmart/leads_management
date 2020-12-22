@@ -10,9 +10,6 @@ import { LayoutInit } from "./LayoutInit";
 import { SubHeader } from "./subheader/SubHeader";
 import { QuickPanel } from "./extras/offcanvas/QuickPanel";
 import { QuickUser } from "./extras/offcanvas/QuickUser";
-import { QuickSearch } from "./extras/offcanvas/QuickSearch";
-import { QuickNotification } from "./extras/offcanvas/QuickNotification";
-import { QuickActions } from "./extras/offcanvas/QuickActions";
 import { ScrollTop } from "./extras/ScrollTop";
 import { AnimateLoading } from "../../_partials/controls";
 
@@ -76,10 +73,10 @@ export function Layout({ children }) {
       </div>
       <QuickUser />
       <QuickPanel />
-      <QuickNotification />
+      {/* <QuickNotification /> */}
       <ScrollTop />
-      <QuickSearch />
-      <QuickActions />
+      {/* <QuickSearch /> */}
+      {/* <QuickActions /> */}
       {/*end::Main*/}
       <LayoutInit />
     </>

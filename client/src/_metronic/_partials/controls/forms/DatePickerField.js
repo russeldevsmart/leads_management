@@ -20,7 +20,7 @@ export function DatePickerField({ ...props }) {
   const [field] = useField(props);
   return (
     <>
-      {props.label && <label>{props.label}</label>}
+      {/* {props.label && <label>{props.label}</label>} */}
       <DatePicker
         className={getFieldCSSClasses(touched[field.name], errors[field.name])}
         style={{ width: "100%" }}

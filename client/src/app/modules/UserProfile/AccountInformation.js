@@ -6,6 +6,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { ModalProgressBar } from "../../../_metronic/_partials/controls";
 import * as auth from "../Auth";
+import { updateUser } from "../Auth/_redux/authCrud";
 
 function AccountInformation(props) {
   // Fields
@@ -22,28 +23,26 @@ function AccountInformation(props) {
       email: values.email,
       language: values.language,
       timeZone: values.timeZone,
-      communication: {
-        email: values.communicationEmail,
-        sms: values.communicationSMS,
-        phone: values.communicationPhone,
-      },
     });
+    
+    let formData = new FormData();
+    for (const property in updatedUser) {
+      formData.append(property, updatedUser[property]);
+    }
+
     // user for update preparation
-    dispatch(props.setUser(updatedUser));
-    setTimeout(() => {
+    
+    updateUser(formData).then((res) => {
       setloading(false);
       setSubmitting(false);
-      // Do request to your server for user update, we just imitate user update there, For example:
-      // update(updatedUser)
-      //  .then(()) => {
-      //    setloading(false);
-      //  })
-      //  .catch((error) => {
-      //    setloading(false);
-      //    setSubmitting(false);
-      //    setStatus(error);
-      // });
-    }, 1000);
+      // user for update preparation
+      const resUser = res.data;
+      resUser["id"] = resUser._id;
+      delete resUser._id;
+      dispatch(props.setUser(resUser));
+    }).catch((err) => {
+      console.log(err);
+    });
   };
   // UI Helpers
   const initialValues = {
@@ -51,9 +50,6 @@ function AccountInformation(props) {
     email: user.email,
     language: user.language,
     timeZone: user.timeZone,
-    communicationEmail: user.communication.email,
-    communicationSMS: user.communication.sms,
-    communicationPhone: user.communication.phone,
   };
   const Schema = Yup.object().shape({
     username: Yup.string().required("Username is required"),
@@ -62,9 +58,6 @@ function AccountInformation(props) {
       .required("Email is required"),
     language: Yup.string(),
     timeZone: Yup.string(),
-    communicationEmail: Yup.bool(),
-    communicationSMS: Yup.bool(),
-    communicationPhone: Yup.bool(),
   });
   const getInputClasses = (fieldname) => {
     if (formik.touched[fieldname] && formik.errors[fieldname]) {
@@ -114,7 +107,7 @@ function AccountInformation(props) {
             {formik.isSubmitting}
           </button>
           <Link
-            to="/user-profile/profile-overview"
+            to="/user-profile/personal-information"
             className="btn btn-secondary"
           >
             Cancel
@@ -268,106 +261,6 @@ function AccountInformation(props) {
                 <option value="Kathmandu">(GMT+05:45) Kathmandu</option>
                 <option value="Astana">(GMT+06:00) Astana</option>
               </select>
-            </div>
-          </div>
-          {/* begin::Form Group */}
-          <div className="form-group row align-items-center">
-            <label className="col-xl-3 col-lg-3 col-form-label">
-              Communication
-            </label>
-            <div className="col-lg-9 col-xl-6">
-              <div className="checkbox-inline">
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    name="communicationEmail"
-                    checked={formik.values.communicationEmail}
-                    onChange={formik.handleChange}
-                  />
-                  <span></span>Email
-                </label>
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    name="communicationSMS"
-                    checked={formik.values.communicationSMS}
-                    {...formik.getFieldProps("communicationSMS")}
-                    onChange={formik.handleChange}
-                  />
-                  <span></span>SMS
-                </label>
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    name="communicationPhone"
-                    checked={formik.values.communicationPhone}
-                    {...formik.getFieldProps("communicationPhone")}
-                    onChange={formik.handleChange}
-                  />
-                  <span></span>Phone
-                </label>
-              </div>
-            </div>
-          </div>
-          {/* begin::Form Group */}
-          <div className="separator separator-dashed my-5"></div>
-          {/* begin::Form Group */}
-          <div className="row">
-            <label className="col-xl-3"></label>
-            <div className="col-lg-9 col-xl-6">
-              <h5 className="font-weight-bold mb-6">Security:</h5>
-            </div>
-          </div>
-          {/* begin::Form Group */}
-          <div className="form-group row">
-            <label className="col-xl-3 col-lg-3 col-form-label">
-              Login verification
-            </label>
-            <div className="col-lg-9 col-xl-6">
-              <button
-                type="button"
-                className="btn btn-light-primary font-weight-bold btn-sm"
-              >
-                Setup login verification
-              </button>
-              <p className="form-text text-muted pt-2">
-                After you log in, you will be asked for additional information
-                to confirm your identity and protect your account from being
-                compromised. {` `}
-                <a href="#" className="font-weight-bold">
-                  Learn more
-                </a>
-                .
-              </p>
-            </div>
-          </div>
-          {/* begin::Form Group */}
-          <div className="form-group row">
-            <label className="col-xl-3 col-lg-3 col-form-label">
-              Password reset verification
-            </label>
-            <div className="col-lg-9 col-xl-6">
-              <div className="checkbox-inline">
-                <label className="checkbox m-0">
-                  <input type="checkbox" />
-                  <span></span>Require personal information to reset your
-                  password.
-                </label>
-              </div>
-              <p className="form-text text-muted py-2">
-                For extra security, this requires you to confirm your email or
-                phone number when you reset your password.
-                <a href="#" className="font-weight-boldk">
-                  Learn more
-                </a>
-                .
-              </p>
-              <button
-                type="button"
-                className="btn btn-light-danger font-weight-bold btn-sm"
-              >
-                Deactivate your account ?
-              </button>
             </div>
           </div>
         </div>

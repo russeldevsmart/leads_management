@@ -1,45 +1,37 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useSelector, shallowEqual, connect, useDispatch } from "react-redux";
+import { useSelector, shallowEqual, connect } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import SVG from "react-inlinesvg";
 import { ModalProgressBar } from "../../../_metronic/_partials/controls";
 import { toAbsoluteUrl } from "../../../_metronic/_helpers";
 import * as auth from "../Auth";
+import { changePassword } from "../Auth/_redux/authCrud";
 
 function ChangePassword(props) {
   // Fields
   const [loading, setloading] = useState(false);
   const [isError, setisError] = useState(false);
-  const dispatch = useDispatch();
+  const [errMsg, setErrMsg] = useState("");
   const user = useSelector((state) => state.auth.user, shallowEqual);
   useEffect(() => {}, [user]);
   // Methods
   const saveUser = (values, setStatus, setSubmitting) => {
     setloading(true);
     setisError(false);
-    const updatedUser = Object.assign(user, {
-      password: values.password,
-    });
-    // user for update preparation
-    dispatch(props.setUser(updatedUser));
-    setTimeout(() => {
+    changePassword({curPassword: values.currentPassword, newPassword: values.password, userId: user.id})
+    .then((res) => {
       setloading(false);
       setSubmitting(false);
+      // dispatch(props.setUser(updatedUser));
+    }).catch((err) => {
+      setloading(false);
+      setSubmitting(false);
+      setErrMsg(err.response.data.message);
       setisError(true);
-      // Do request to your server for user update, we just imitate user update there, For example:
-      // update(updatedUser)
-      //  .then(()) => {
-      //    setloading(false);
-      //  })
-      //  .catch((error) => {
-      //    setloading(false);
-      //    setSubmitting(false);
-      //    setStatus(error);
-      // });
-    }, 1000);
+    });
   };
   // UI Helpers
   const initialValues = {
@@ -133,10 +125,7 @@ function ChangePassword(props) {
                 </span>
               </div>
               <div className="alert-text font-weight-bold">
-                Configure user passwords to expire periodically. Users will need
-                warning that their passwords are going to expire,
-                <br />
-                or they might inadvertently get locked out of the system!
+                {errMsg}
               </div>
               <div className="alert-close" onClick={() => setisError(false)}>
                 <button

@@ -19,6 +19,7 @@
     "concurrently": "^4.0.1",
     "cors": "^2.8.5",
     "express": "^4.16.4",
+    "formidable": "^1.2.2",
     "is-empty": "^1.2.0",
     "jsonwebtoken": "^8.3.0",
     "moment": "^2.29.1",

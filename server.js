@@ -15,6 +15,7 @@ app.use(cors());
 // Bodyparser middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(express.static(__dirname + '/'));
 
 // DB Config
 const db = require("./config/keys").mongoURI;

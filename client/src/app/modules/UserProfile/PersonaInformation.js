@@ -6,8 +6,10 @@ import * as Yup from "yup";
 import { ModalProgressBar } from "../../../_metronic/_partials/controls";
 import { toAbsoluteUrl } from "../../../_metronic/_helpers";
 import * as auth from "../Auth";
+import { updateUser } from "../Auth/_redux/authCrud";
 
 function PersonaInformation(props) {
+  
   // Fields
   const [loading, setloading] = useState(false);
   const [pic, setPic] = useState("");
@@ -18,41 +20,42 @@ function PersonaInformation(props) {
       setPic(user.pic);
     }
   }, [user]);
+
   // Methods
   const saveUser = (values, setStatus, setSubmitting) => {
     setloading(true);
-    const updatedUser = Object.assign(user, values);
-    // user for update preparation
-    dispatch(props.setUser(updatedUser));
-    setTimeout(() => {
+    let updatedUser = Object.assign(user, values);
+    updatedUser = { ...updatedUser, pic: pic };
+    let formData = new FormData();
+    for (const property in updatedUser) {
+      formData.append(property, updatedUser[property]);
+    }
+    updateUser(formData).then((res) => {
       setloading(false);
       setSubmitting(false);
-      // Do request to your server for user update, we just imitate user update there, For example:
-      // update(updatedUser)
-      //  .then(()) => {
-      //    setloading(false);
-      //  })
-      //  .catch((error) => {
-      //    setloading(false);
-      //    setSubmitting(false);
-      //    setStatus(error);
-      // });
-    }, 1000);
+      // user for update preparation
+      const resUser = res.data;
+      resUser["id"] = resUser._id;
+      delete resUser._id;
+      dispatch(props.setUser(resUser));
+    }).catch((err) => {
+      console.log(err);
+    });
   };
+
   // UI Helpers
   const initialValues = {
-    pic: user.pic,
-    firstname: user.firstname,
-    lastname: user.lastname,
-    companyName: user.companyName,
-    phone: user.phone,
+    pic: user.pic ? user.pic : "",
+    fullname: user.fullname,
+    companyName: user.companyName ? user.companyName : "",
+    phone: user.phone ? user.phone : "",
     email: user.email,
-    website: user.website,
+    website: user.website ? user.website : "",
   };
+
   const Schema = Yup.object().shape({
     pic: Yup.string(),
-    firstname: Yup.string().required("First name is required"),
-    lastname: Yup.string().required("Last name is required"),
+    fullname: Yup.string().required("Full name is required"),
     companyName: Yup.string(),
     phone: Yup.string().required("Phone is required"),
     email: Yup.string()
@@ -60,6 +63,7 @@ function PersonaInformation(props) {
       .required("Email is required"),
     website: Yup.string(),
   });
+
   const getInputClasses = (fieldname) => {
     if (formik.touched[fieldname] && formik.errors[fieldname]) {
       return "is-invalid";
@@ -71,6 +75,7 @@ function PersonaInformation(props) {
 
     return "";
   };
+
   const formik = useFormik({
     initialValues,
     validationSchema: Schema,
@@ -81,16 +86,26 @@ function PersonaInformation(props) {
       resetForm();
     },
   });
+
   const getUserPic = () => {
     if (!pic) {
       return "none";
     }
 
-    return `url(${pic})`;
+    return `url(${pic.preview ? pic.preview : pic})`;
   };
+
   const removePic = () => {
     setPic("");
   };
+
+  const changeAvatar = (e) => {
+    const picFile = e.target.files[0];
+    const picObj = Object.assign(picFile, {
+      preview: URL.createObjectURL(picFile)
+    });
+    setPic(picObj);
+  }
   return (
     <form
       className="card card-custom card-stretch"
@@ -120,7 +135,7 @@ function PersonaInformation(props) {
             {formik.isSubmitting}
           </button>
           <Link
-            to="/user-profile/profile-overview"
+            to="/user-profile/personal-information"
             className="btn btn-secondary"
           >
             Cancel
@@ -166,6 +181,7 @@ function PersonaInformation(props) {
                     type="file"
                     // name="pic"
                     accept=".png, .jpg, .jpeg"
+                    onChange={changeAvatar}
                     // {...formik.getFieldProps("pic")}
                   />
                   <input type="hidden" name="profile_avatar_remove" />
@@ -197,41 +213,22 @@ function PersonaInformation(props) {
           </div>
           <div className="form-group row">
             <label className="col-xl-3 col-lg-3 col-form-label">
-              First Name
+              Full Name
             </label>
             <div className="col-lg-9 col-xl-6">
               <input
                 type="text"
                 placeholder="First name"
                 className={`form-control form-control-lg form-control-solid ${getInputClasses(
-                  "firstname"
+                  "fullname"
                 )}`}
-                name="firstname"
-                {...formik.getFieldProps("firstname")}
+                name="fullname"
+                {...formik.getFieldProps("fullname")}
               />
-              {formik.touched.firstname && formik.errors.firstname ? (
+              {formik.touched.fullname && formik.errors.fullname ? (
                 <div className="invalid-feedback">
-                  {formik.errors.firstname}
+                  {formik.errors.fullname}
                 </div>
-              ) : null}
-            </div>
-          </div>
-          <div className="form-group row">
-            <label className="col-xl-3 col-lg-3 col-form-label">
-              Last Name
-            </label>
-            <div className="col-lg-9 col-xl-6">
-              <input
-                type="text"
-                placeholder="Last name"
-                className={`form-control form-control-lg form-control-solid ${getInputClasses(
-                  "lastname"
-                )}`}
-                name="lastname"
-                {...formik.getFieldProps("lastname")}
-              />
-              {formik.touched.lastname && formik.errors.lastname ? (
-                <div className="invalid-feedback">{formik.errors.lastname}</div>
               ) : null}
             </div>
           </div>

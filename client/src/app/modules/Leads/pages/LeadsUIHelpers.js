@@ -11,6 +11,44 @@ export const initialFilter = {
   pageNumber: 1,
   pageSize: 10
 };
+export const categories = [
+  { name: "Voitures Neuves", value: "new_cars" },
+  { name: "Voitures Occasion", value: "used_cars" },
+  { name: "Rachat/Reprise", value: "buyout_takeover" },
+  { name: "Inspections", value: "inspection" },
+  { name: "Vérifications", value: "verification" },
+  { name: "Services", value: "services" },
+  { name: "Pièces de Rechange", value: "spare_parts" },
+  { name: "Demandes Supplémentaires", value: "other_requests" },
+];
+export const categoryColumns = {
+  "new_cars": ["make", "model", "budget"],
+  "used_cars": ["make", "model", "budget"],
+  "buyout_takeover": ["listing_link", "make", "model", "year", "mileage", "desired_price", "offered_price", "reprise"],
+  "inspection": ["make", "model", "year", "mileage", "desired_price", "listing_link", "inspection_date"],
+  "verification": ["make", "model", "year", "mileage", "desired_price", "listing_link"],
+  "services": ["make", "model", "year", "service", "date_maintenance"],
+  "spare_parts": ["make", "model", "year", "wanted_part"],
+  "other_requests": ["request_details"],
+};
+export const years = [2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011, 2010, 2009, 2008, 2007, 2006, 2005, 2004, 2003, 2002, 2001, 2000, 
+  1999, 1998, 1997, 1996, 1995, 1994, 1993, 1992, 1991, 1990];
+export const columnLabel = {
+  "make": "Make",
+  "model": "Model",
+  "budget": "Budget",
+  "listing_link": "Listing Link",
+  "year": "Year",
+  "mileage": "Mileage",
+  "desired_price": "Desired Price",
+  "offered_price": "Price offered",
+  "reprise": "Reprise",
+  "inspection_date": "Inspection Date",
+  "service": "Service",
+  "date_maintenance": "Date Entretien",
+  "wanted_part": "Pièce recherchée",
+  "request_details": "Détails de la demande",
+}
 export const sourceList = [
   {label: "Voitures.ci", value: "Voitures.ci", _id: "Voitures.ci"},
   {label: "Whatsapp", value: "Whatsapp", _id: "Whatsapp"},
@@ -26,7 +64,16 @@ export const clientList = [
   { label: "Professionnel", value: "Professionnel", _id: "Professionnel" }, 
   { label: "Revendeur", value: "Revendeur", _id: "Revendeur" }
 ];
-
+export const serviceOptions = [
+  { label: "Climatisation", value: "Climatisation", _id: "Climatisation" },
+  { label: "Batterie", value: "Batterie", _id: "Batterie" }, 
+  { label: "Pneus", value: "Pneus", _id: "Pneus" },
+  { label: "Vidange", value: "Vidange", _id: "Vidange" },
+  { label: "Moteur", value: "Moteur", _id: "Moteur" }, 
+  { label: "Freinage", value: "Freinage", _id: "Freinage" },
+  { label: "Essuies-Glace", value: "Essuies-Glace", _id: "Essuies-Glace" },
+  { label: "Autre", value: "Autre", _id: "Autre" }
+]
 export const getTimeSince = (date) => {
   const seconds = Math.floor((new Date() - new Date(date)) / 1000);
 

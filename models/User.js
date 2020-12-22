@@ -3,6 +3,9 @@ const Schema = mongoose.Schema;
 
 // Create Schema
 const UserSchema = new Schema({
+  pic: {
+    tpe: String,
+  },
   fullname: {
     type: String,
     required: true,
@@ -18,6 +21,21 @@ const UserSchema = new Schema({
   password: {
     type: String,
     required: true
+  },
+  website: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  companyName: {
+    type: String,
+  },
+  timeZone: {
+    type: String,
+  },
+  language: {
+    type: String,
   },
   date: {
     type: Date,

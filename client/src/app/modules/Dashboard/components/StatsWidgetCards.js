@@ -4,11 +4,12 @@ import SVG from "react-inlinesvg";
 import { toAbsoluteUrl } from "../../../../_metronic/_helpers";
 
 export default function StatsWidgetCards() {
-  const { totalLeads, newLeads, ongoingLeads } = useSelector(
+  const { totalLeads, newLeads, ongoingLeads,goneLeads } = useSelector(
     (state) => ({
       totalLeads: state.dashboard.totalLeads,
       newLeads: state.dashboard.newLeads,
-      ongoingLeads: state.dashboard.ongoingLeads
+      ongoingLeads: state.dashboard.ongoingLeads,
+      goneLeads: state.dashboard.goneLeads
     }),
     shallowEqual
   );
@@ -49,6 +50,18 @@ export default function StatsWidgetCards() {
             </div>
           </div>
         </div>
+        <div className="col-lg-3">
+          <div className="card card-custom bg-warning gutter-b" style={{height: '150px'}}>
+            <div className="card-body">
+              <span className="svg-icon svg-icon-3x svg-icon-white ml-n2">
+                <SVG src={toAbsoluteUrl("/media/svg/icons/Communication/Group-chat.svg")} />
+              </span>
+              <div className="text-inverse-primary font-weight-bolder font-size-h2 mt-3">{goneLeads}</div>
+              <a href="#!" className="text-inverse-primary font-weight-bold font-size-lg mt-1">Perdu Leads</a>
+            </div>
+          </div>
+        </div>
+        
       </div>
     </>
   );

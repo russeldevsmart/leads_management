@@ -5,6 +5,7 @@ const initialDashboardState = {
   totalLeads: 0,
   newLeads: 0,
   ongoingLeads: 0,
+  goneLeads: 0,
   weeklyLeadsChartData: null,
   leadsCategoryChartData: null,
   leadStatuChartData: null,
@@ -24,6 +25,7 @@ export const dashboardSlice = createSlice({
       state.loading = false;
       state.totalLeads = action.payload.totalLeads;
       state.newLeads = action.payload.newLeads;
+      state.goneLeads = action.payload.goneLeads;
       state.ongoingLeads = action.payload.ongoingLeads;
       state.lastActions = action.payload.lastActions;
       state.topLead = action.payload.topLead;

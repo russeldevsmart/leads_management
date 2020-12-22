@@ -38,7 +38,6 @@ export default function WeeklyLeadsChart() {
         </div>
         <div className="card-body">
             <div className="" id="weekly_leads_chart">
-
             </div>
         </div>
       </div>
@@ -61,7 +60,21 @@ function getChartOption(weeklyLeadsChartData) {
     }],
     chart: {
       height: 350,
-      type: 'area'
+      type: 'area',
+      toolbar: {
+        show: true,
+        offsetX: 0,
+        offsetY: 0,
+        tools: {
+          download: true,
+          selection: false,
+          zoom: false,
+          zoomin: false,
+          zoomout: false,
+          pan: false,
+          reset: false,
+        },
+      },
     },
     dataLabels: {
       enabled: false

@@ -23,12 +23,19 @@ export default function ActionTimeline() {
         <div className="timeline timeline-6 mt-3">
           {
             lastActions && lastActions.length > 0 && lastActions.map((action, index) => {
+              let actionColor = "";
+              if (action.action_type === 'lead_created')
+                actionColor = "text-danger";
+              else if (action.action_type === 'lead_comments')
+                actionColor = "text-primary";
+              else if (action.action_type === 'lead_updated')
+                actionColor = "text-warning";
               return (
                 <div className="timeline-item align-items-start" key={index}>
                   <div className="timeline-label font-weight-bolder text-dark-75 font-size-lg">{moment(action.date).format("HH:mm")}</div>
           
                   <div className="timeline-badge">
-                    <i className="fa fa-genderless text-warning icon-xl"></i>
+                    <i className={`fa fa-genderless ${actionColor} icon-xl`}></i>
                   </div>
           
                   <div className="font-weight-mormal timeline-content text-muted pl-3">

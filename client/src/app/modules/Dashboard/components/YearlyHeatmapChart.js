@@ -104,6 +104,20 @@ function getChartOption(yearlyHeatmapData) {
     chart: {
       height: 350,
       type: 'heatmap',
+      toolbar: {
+        show: true,
+        offsetX: 0,
+        offsetY: 0,
+        tools: {
+          download: true,
+          selection: false,
+          zoom: false,
+          zoomin: false,
+          zoomout: false,
+          pan: false,
+          reset: false,
+        },
+      },
     },
     plotOptions: {
       heatmap: {

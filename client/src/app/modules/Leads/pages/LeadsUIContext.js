@@ -29,6 +29,7 @@ export function LeadsUIProvider({leadsUIEvents, children}) {
 
   const initLead = {
     id: undefined,
+    category: "",
     client_type: "",
     name: "",
     phone: "",
@@ -36,6 +37,17 @@ export function LeadsUIProvider({leadsUIEvents, children}) {
     make: null,
     model: null,
     budget: 0,
+    listing_link: "",
+    year: "",
+    mileage: 0,
+    desired_price: 0,
+    offered_price: 0,
+    reprise: "",
+    inspection_date: "",
+    service: "",
+    date_maintenance: "",
+    wanted_part: "",
+    request_details: "",
     status: "",
     source: "",
   };

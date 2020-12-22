@@ -7,7 +7,7 @@ const LeadSchema = new Schema({
     type: String,
     required: true,
   },
-  category_type: {
+  category: {
     type: String,
   },
   client_type: {
@@ -60,44 +60,41 @@ const LeadSchema = new Schema({
   mileage: {
     type: Number,
   },
-  requested_price: {
+  offered_price: {
     type: Number,
   },
   budget: {
     type: Number
   },
-  trade_in_budget: {
+  desired_price: {
     type: Number,
   },
-  status: {
-    type: String,
+  offered_price: {
+    type: Number,
   },
-  request_type: {
+  reprise: {
     type: String
   },
-  request: {
+  wanted_part: {
     type: String,
   },
-  source: {
-    type: String
-  },
-  service: {
+  service: [
+    {type: String}
+  ],
+  request_details: {
     type: String,
   },
-  service_date: {
-    type: Date,
-  },
-  spare_part_requested: {
-    type: String,
-  },
-  details: {
-    type: String,
-  },
-  verification_date: {
+  date_maintenance: {
     type: Date,
   },
   inspection_date: {
     type: Date,
+  },
+  source: {
+    type: String
+  },
+  status: {
+    type: String,
   },
 });
 

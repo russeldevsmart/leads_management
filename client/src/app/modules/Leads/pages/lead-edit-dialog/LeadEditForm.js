@@ -9,16 +9,18 @@ import {
   Input,
   SearchSelect,
   NumberInput,
-  PhoneNumberInput
+  PhoneNumberInput,
+  Select,
+  DatePickerField
 } from "../../../../../_metronic/_partials/controls";
 import * as uiHelpers from "../LeadsUIHelpers";
 import { KTUtil } from "./../../../../../_metronic/_assets/js/components/util";
 import { statusList } from "../../constants";
 
 // Field types
-// const dateFields = ["inspection_date", "service_date", "verification_date"];
+const dateFields = ["inspection_date", "date_maintenance"];
 // const selectFields = ["make", "model", "status"];
-const numberFields = ["trade_in_budget", "requested_price", "budget", "mileage"];
+const numberFields = ["offered_price", "desired_price", "budget", "mileage"];
 
 // Custom React-Select Option Label
 const colorOptionLabel = ({ value, label, color }) => (
@@ -56,7 +58,7 @@ export function LeadEditForm({
     shallowEqual
   );
 
-  // const [ category, setCategory ] = useState("buy_cash");
+  const [ category, setCategory ] = useState("new_cars");
   const [ phoneValid, setPhoneValid ] = useState("NOTHING");
   const [ typingTimeout, setTypingTimeout ] = useState(null);
   const [ phoneLoading, setPhoneLoading ] = useState(false);
@@ -65,7 +67,7 @@ export function LeadEditForm({
 
   useEffect(() => {
     if (lead._id) {
-      // setCategory(lead.category_type);
+      setCategory(lead.category);
       setPhoneNumber(lead.phone);
     }
   }, [lead]);
@@ -78,9 +80,9 @@ export function LeadEditForm({
       .email("Invalid email"),
   });
 
-  // const handleChangeCategory = (e) => {
-  //   setCategory(e.target.value);
-  // }
+  const handleChangeCategory = (e) => {
+    setCategory(e.target.value);
+  }
 
   const handleCommentChange = (e) => {
     setComment(e.target.value);
@@ -130,10 +132,10 @@ export function LeadEditForm({
     });
     const diffKeys = uiHelpers.getDiffKeys(newValues, lead);
     if (lead._id) {
-      saveLead({...newValues, phone: phoneNumber, comments: comment, diffKeys: diffKeys});
+      saveLead({...newValues, phone: phoneNumber, comments: comment, diffKeys: diffKeys, category});
     }
     else
-      saveLead({...newValues, phone: phoneNumber, comments: comment});
+      saveLead({...newValues, phone: phoneNumber, comments: comment, category});
   }
 
   return (
@@ -158,36 +160,38 @@ export function LeadEditForm({
               <div className="row">
                 <div className="col-md-6 border-right-primary border-right-md px-md-10">
                   <Form className="form form-label-right">
-                    {/* <div className="form-group">
-                      Category
+                    <div className="form-group">
                       <Select name="category" label="Category" onChange={handleChangeCategory} value={category} >
                         {
-                          categories && categories.map((cat, index) => {
+                          uiHelpers.categories && uiHelpers.categories.map((cat, index) => {
                             return (
                               <option value={cat.value} key={index}>{cat.name}</option>
                             )
                           })
                         }
                       </Select>
-                    </div> */}
-                    <label className="text-primary font-weight-bolder">LEAD DETAILS:</label>
-                    <div className="form-group">
-                      {/* Client Type */}
-                      <SearchSelect
-                        name="client_type"
-                        label="Client Type"
-                        options={uiHelpers.clientList}
-                      />
                     </div>
-                    <div className="form-group">
-                      {/* Name */}
-                      <Field
-                        name="name"
-                        component={Input}
-                        placeholder="Name"
-                        label="Name"
-                        withFeedbackLabel={true}
-                      />
+                    <label className="text-primary font-weight-bolder">LEAD DETAILS:</label>
+                    <div className="form-group row">
+                      <div className="col-md-6">
+
+                        {/* Client Type */}
+                        <SearchSelect
+                          name="client_type"
+                          label="Client Type"
+                          options={uiHelpers.clientList}
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        {/* Name */}
+                        <Field
+                          name="name"
+                          component={Input}
+                          placeholder="Name"
+                          label="Name"
+                          withFeedbackLabel={true}
+                        />
+                      </div>
                     </div>
                     <div className="form-group position-relative">
                       {/* Phone */}
@@ -215,37 +219,143 @@ export function LeadEditForm({
                       />
                     </div>
                     <label className="text-primary font-weight-bolder">INTEREST DETAILS:</label>
-                    <div className="form-group">
-                      {/* Make */}
-                      <SearchSelect
-                        name="make"
-                        label="Make"
-                        isMulti={true}
-                        options={makes}
-                        changeFunc={handleMakeChange}
-                      />
-                    </div>
+                    {
+                      uiHelpers.categoryColumns[category].map((column, index) => {
+                        if (column === "make") {
+                          return (
+                            <div className="form-group" key={index}>
+                              {/* Make */}
+                              <SearchSelect
+                                name="make"
+                                label="Make"
+                                isMulti={true}
+                                options={makes}
+                                changeFunc={handleMakeChange}
+                              />
+                            </div>
+                          )
+                        }
+                        else if (column === "model") {
+                          return (
+                            <div className="form-group" key={index}>
+                              {/* Model */}
+                              <SearchSelect
+                                name="model"
+                                label="Model"
+                                isMulti={true}
+                                options={models}
+                              />
+                            </div>
+                          )
+                        } else if (column === "year") {
+                          return (
+                            <div className="form-group" key={index}>
+                              {/* Year */}
+                              <Field
+                                id="year"
+                                name="year"
+                                component={Select}
+                                label="Year"
+                                withFeedbackLabel={true}
+                              >
+                              {
+                                uiHelpers.years && uiHelpers.years.map((year, j) => {
+                                  return (
+                                    <option value={year} key={j}>{year}</option>
+                                  )
+                                })
+                              }
+                              </Field>
+                            </div>
+                          )
+                        } else if (column === "service") {
+                          return (
+                            <div className="form-group" key={index}>
+                              {/* Service */}
+                              <SearchSelect
+                                name="service"
+                                label="Service"
+                                isMulti={true}
+                                options={uiHelpers.serviceOptions}
+                              />
+                            </div>
+                          )
+                        } else if (column === "reprise") {
+                          return (
+                            <div className="form-group" key={index}>
+                              {/* Reprise */}
+                              <Field
+                                name="reprise"
+                                render={({ field }) => (
+                                  <div className="d-flex align-items-center">
+                                    <label className="mb-0 mr-3">Reprise:</label>
+                                    <div className="form-check form-check-inline">
+                                      <input
+                                        {...field}
+                                        id="yes"
+                                        value="yes"
+                                        checked={field.value === 'yes'}
+                                        name="reprise"
+                                        type="radio"
+                                        className="form-check-input"
+                                      />
+                                      <label htmlFor="yes" className="form-check-label">Oui</label>
+                                    </div>
 
-                    <div className="form-group">
-                      {/* Model */}
-                      <SearchSelect
-                        name="model"
-                        label="Model"
-                        isMulti={true}
-                        options={models}
-                      />
-                    </div>
-                    <div className="form-group">
-                      {/* Budget */}
-                      <Field
-                        type="number"
-                        name="budget"
-                        component={NumberInput}
-                        placeholder="Budget"
-                        label="Budget"
-                        suffix=" CFA"
-                      />
-                    </div>
+                                    <div className="form-check form-check-inline">
+                                      <input
+                                        {...field}
+                                        id="no"
+                                        value="no"
+                                        name="reprise"
+                                        checked={field.value === 'no'}
+                                        type="radio"
+                                        className="form-check-input"
+                                      />
+                                      <label htmlFor="no" className="form-check-label">Non</label>
+                                    </div>
+                                  </div>
+                                )}
+                              /> 
+                            </div>
+                          )
+                        } else if (numberFields.includes(column)) {
+                          return (
+                            <div className="form-group" key={index}>
+                              <Field
+                                type="number"
+                                name={column}
+                                component={NumberInput}
+                                placeholder={uiHelpers.columnLabel[column]}
+                                label={uiHelpers.columnLabel[column]}
+                                suffix=" CFA"
+                              />
+                            </div>
+                          )
+                        } else if (dateFields.includes(column)) {
+                          return (
+                            <div className="form-group" key={index}>
+                              <DatePickerField
+                                name={column}
+                                label={uiHelpers.columnLabel[column]}
+                              />
+                            </div>
+                          )
+                        } else {
+                          return (
+                            <div className="form-group" key={index}>
+                              <Field
+                                name={column}
+                                component={Input}
+                                placeholder={uiHelpers.columnLabel[column]}
+                                label={uiHelpers.columnLabel[column]}
+                                withFeedbackLabel={true}
+                              />
+                            </div>
+                          )
+                        }
+                      })
+                    }
                     <label className="text-primary font-weight-bolder">STATUS DETAILS:</label>
                     <div className="form-group">
                       {/* Status */}

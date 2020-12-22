@@ -56,10 +56,10 @@ export default function Dashboard() {
                   <div className="card card-custom gutter-b" style={{height: '150px'}}>
                     <div className="card-body d-flex align-items-center">
                       <div className="d-flex flex-column flex-grow-1 py-2 py-lg-5">
-                        <span className="card-title font-weight-bolder font-size-h5 mb-2 text-primary">{topLead}</span>
+                        <span className="card-title font-weight-bolder font-size-h5 mb-2 text-primary">{topLead && topLead.name}</span>
                         <span className="font-weight-bold text-muted font-size-lg">Top Lead</span>
                       </div>
-                      <img src={toAbsoluteUrl("/media/users/blank.png")} className="ml-2 align-self-end h-100px" alt="" style={{ borderRadius: '50%'}} />
+                      <img src={topLead && topLead.pic ? topLead.pic : toAbsoluteUrl("/media/users/blank.png")} className="ml-2 align-self-end h-100px" alt="" style={{ borderRadius: '50%'}} />
                     </div>
                   </div>
                 </div>
