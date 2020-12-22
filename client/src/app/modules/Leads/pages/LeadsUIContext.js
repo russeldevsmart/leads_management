@@ -29,6 +29,7 @@ export function LeadsUIProvider({leadsUIEvents, children}) {
 
   const initLead = {
     id: undefined,
+    client_type: "",
     name: "",
     phone: "",
     email: "",

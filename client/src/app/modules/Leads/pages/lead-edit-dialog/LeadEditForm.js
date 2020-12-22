@@ -12,6 +12,7 @@ import {
   PhoneNumberInput
 } from "../../../../../_metronic/_partials/controls";
 import * as uiHelpers from "../LeadsUIHelpers";
+import { KTUtil } from "./../../../../../_metronic/_assets/js/components/util";
 import { statusList } from "../../constants";
 
 // Field types
@@ -34,6 +35,16 @@ export function LeadEditForm({
   actionsLoading,
   onHide,
 }) {
+  useEffect(() => {
+    // Init Lead Timeline Scroll
+    const timelineContainer = KTUtil.getById("lead_timeline_container");
+    KTUtil.scrollInit(timelineContainer, {
+      disableForMobile: true,
+      resetHeightOnDestroy: true,
+      handleWindowResize: true,
+      height: 600
+    });
+  }, []);
 
   // Leads Redux state
   const dispatch = useDispatch();
@@ -76,8 +87,10 @@ export function LeadEditForm({
   }
 
   const handleMakeChange = (options) => {
-    const makeIds = options.map((option) => { return option.value });
-    dispatch(actions.fetchCarModels(makeIds));
+    if (options && options.length > 0) {
+      const makeIds = options.map((option) => { return option.value });
+      dispatch(actions.fetchCarModels(makeIds));
+    }
   }
 
   const handlePhoneInput = async (phone) => {
@@ -115,7 +128,12 @@ export function LeadEditForm({
       if (typeof newValues[elem] === "string")
         newValues[elem] = parseFloat(newValues[elem].replaceAll(",", ""));
     });
-    saveLead({...newValues, phone: phoneNumber, comments: comment});
+    const diffKeys = uiHelpers.getDiffKeys(newValues, lead);
+    if (lead._id) {
+      saveLead({...newValues, phone: phoneNumber, comments: comment, diffKeys: diffKeys});
+    }
+    else
+      saveLead({...newValues, phone: phoneNumber, comments: comment});
   }
 
   return (
@@ -153,6 +171,14 @@ export function LeadEditForm({
                       </Select>
                     </div> */}
                     <label className="text-primary font-weight-bolder">LEAD DETAILS:</label>
+                    <div className="form-group">
+                      {/* Client Type */}
+                      <SearchSelect
+                        name="client_type"
+                        label="Client Type"
+                        options={uiHelpers.clientList}
+                      />
+                    </div>
                     <div className="form-group">
                       {/* Name */}
                       <Field
@@ -223,21 +249,19 @@ export function LeadEditForm({
                     <label className="text-primary font-weight-bolder">STATUS DETAILS:</label>
                     <div className="form-group">
                       {/* Status */}
-                        <SearchSelect
-                          name="status"
-                          label="Status"
-                          options={statusList}
-                          formatOptionLabel={colorOptionLabel}
-                        />
+                      <SearchSelect
+                        name="status"
+                        label="Status"
+                        options={statusList}
+                        formatOptionLabel={colorOptionLabel}
+                      />
                     </div>
                     <div className="form-group">
                       {/* Source */}
-                      <Field
+                      <SearchSelect
                         name="source"
-                        component={Input}
-                        placeholder="Source"
                         label="Source"
-                        withFeedbackLabel={true}
+                        options={uiHelpers.sourceList}
                       />
                     </div>
                     <div className="form-group mb-0">
@@ -251,18 +275,33 @@ export function LeadEditForm({
                 </div>
                 <div className="col-md-6 border-left-primary border-left-md px-md-10">
                   <div className="d-flex flex-column justify-content-between h-100">
-                    <div className="timeline timeline-2">
+                    <div className="timeline timeline-2 pr-3" id="lead_timeline_container">
                       <div className="timeline-bar"></div>
                       {
                         lead.comments && lead.comments.length > 0 && lead.comments.map((comment, index) => {
+                          const color = comment.type === 'comments' ? "" : "bg-primary";
                           return (
                             <div className="timeline-item" key={index}>
-                              <div className={`timeline-badge ${uiHelpers.timelineColors[Math.floor(Math.random() * 100) % 6]}`}></div>
+                              <div className={`timeline-badge ${color}`}></div>
                               <div className="timeline-content d-flex align-items-center justify-content-between">
                                   <span className="mr-3">
-                                    {comment.content}
+                                    {comment.type === 'comments' && 
+                                      <>
+                                      {comment.content} (<span className="text-primary"><b>{comment.created_by.fullname}</b></span> left this comment)
+                                      </>
+                                    }
+                                    {comment.type === 'action_created' && (
+                                      <>
+                                      This lead is created by <span className="text-primary"><b>{comment.created_by.fullname}</b></span>
+                                      </>
+                                    )}
+                                    {comment.type === 'action_updated' && (
+                                      <>
+                                      <span className="text-primary"><b>{comment.created_by.fullname}</b></span> have updated the <b>{comment.content}</b> in this lead.
+                                      </>
+                                    )}
                                   </span>
-                                  <span className="text-muted text-right">{uiHelpers.getTimeSince(comment.created_on)}</span>
+                                  <span className="text-muted text-right">{uiHelpers.getTimeSince(comment.created_on)} ago</span>
                               </div>
                           </div>
                           )

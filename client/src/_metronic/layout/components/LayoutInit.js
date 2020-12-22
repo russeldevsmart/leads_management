@@ -2,6 +2,7 @@ import React, { useLayoutEffect } from "react";
 import { KTUtil } from "../../_assets/js/components/util";
 import KTLayoutAside from "../../_assets/js/layout/base/aside";
 import KTLayoutAsideMenu from "../../_assets/js/layout/base/aside-menu";
+
 import KTLayoutContent from "../../_assets/js/layout/base/content";
 import KTLayoutFooter from "../../_assets/js/layout/base/footer";
 import KTLayoutSubheader from "../../_assets/js/layout/base/subheader";

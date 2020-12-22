@@ -72,8 +72,11 @@ export function SearchSelect({ ...props }) {
           if (props.changeFunc)
             props.changeFunc(option);
           if (props.isMulti === true) {
-            const ids = option.map((o) => { return o._id });
-            setFieldValue(field.name, ids);
+            if (option && option.length > 0) {
+              const ids = option.map((o) => { return o._id });
+              setFieldValue(field.name, ids);
+            } else
+              setFieldValue(field.name, null);
           } else {
             setFieldValue(field.name, option._id)
           }

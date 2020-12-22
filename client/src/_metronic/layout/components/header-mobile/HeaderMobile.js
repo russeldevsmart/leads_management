@@ -28,7 +28,7 @@ export function HeaderMobile() {
           <img
             alt="Logo"
             className="logo-default max-h-30px"
-            src={toAbsoluteUrl("/media/logos/logo-letter-2.png")}
+            src={toAbsoluteUrl("/media/logos/logo.png")}
           />
         </Link>
         {/* end::Logo */}

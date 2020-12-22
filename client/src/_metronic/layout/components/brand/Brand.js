@@ -13,7 +13,7 @@ export function Brand() {
         <Link to="" className="brand-logo">
           <img
             alt="logo"
-            src={toAbsoluteUrl("/media/logos/logo-letter-2.png")}
+            src={toAbsoluteUrl("/media/logos/logo.png")}
             className="max-h-30px"
           />
         </Link>

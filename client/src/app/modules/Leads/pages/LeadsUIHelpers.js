@@ -1,3 +1,4 @@
+import equal from 'fast-deep-equal'
 export const defaultSorted = [{ dataField: "id", order: "asc" }];
 export const sizePerPageList = [
   { text: "3", value: 3 },
@@ -10,7 +11,21 @@ export const initialFilter = {
   pageNumber: 1,
   pageSize: 10
 };
-export const timelineColors = ["bg-danger", "bg-primary", "bg-warning", "bg-success", "bg-info", "", "bg-secondary"];
+export const sourceList = [
+  {label: "Voitures.ci", value: "Voitures.ci", _id: "Voitures.ci"},
+  {label: "Whatsapp", value: "Whatsapp", _id: "Whatsapp"},
+  {label: "Sites Marques", value: "Sites Marques", _id: "Sites Marques"},
+  {label: "Facebook", value: "Facebook", _id: "Facebook"},
+  {label: "Instagram", value: "Instagram", _id: "Instagram"},
+  {label: "Téléphone", value: "Téléphone", _id: "Téléphone"},
+  {label: "Email", value: "Email", _id: "Email"},
+  {label: "Autre", value: "Autre", _id: "Autre"},
+];
+export const clientList = [
+  { label: "Particulier", value: "Particulier", _id: "Particulier" },
+  { label: "Professionnel", value: "Professionnel", _id: "Professionnel" }, 
+  { label: "Revendeur", value: "Revendeur", _id: "Revendeur" }
+];
 
 export const getTimeSince = (date) => {
   const seconds = Math.floor((new Date() - new Date(date)) / 1000);
@@ -43,4 +58,12 @@ export const getTimeSince = (date) => {
     return Math.floor(interval) + " minutes";
   }
   return Math.floor(seconds) + " seconds";
+}
+export function getDiffKeys(o1, o2) {
+  let diffKeys = [];
+  for (const [key, value] of Object.entries(o1)) {
+    if (!equal(value, o2[key]) && key !== 'comments')
+      diffKeys.push(key);
+  }
+  return diffKeys;
 }

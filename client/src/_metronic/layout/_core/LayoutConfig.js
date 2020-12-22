@@ -94,7 +94,7 @@ export function getInitLayoutConfig() {
       style: "transparent", // solid/transparent
     },
     content: {
-      width: "fixed", // fluid|fixed
+      width: "fluid", // fluid|fixed
     },
     aside: {
       self: {

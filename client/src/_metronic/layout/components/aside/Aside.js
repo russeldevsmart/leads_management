@@ -150,7 +150,7 @@ export function Aside() {
               {/* begin::Workspace */}
               <div className="aside-workspace scroll scroll-push my-2">
                 <div className="tab-content">
-                  <AsideMenu isActive={checkIsActive(location, "/leads")} />
+                  <AsideMenu isActive={true} />
                 </div>
               </div>
               {/* end::Workspace */}

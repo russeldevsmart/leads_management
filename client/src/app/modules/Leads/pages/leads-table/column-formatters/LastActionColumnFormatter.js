@@ -9,8 +9,8 @@ export function LastActionColumnFormatter(cellContent, row) {
       <img src="/media/users/default.jpg" className="rounded-circle mr-4" alt="Editor Avatar" width="40" height="40"></img>
       <div>
         <span className="d-inline-block w-100 mb-2 font-weight-bold text-dark-75">{row.edited_by.fullname}</span>
-        <span className="d-inline-block w-100 mb-1 font-size-sm text-muted">{moment(row.edited_on).format("DD/MM/YYYY")}</span>
-        <span className="d-inline-block w-100 font-size-sm text-muted">{moment(row.edited_on).format("HH:mm")}</span>
+        <span className="d-inline-block w-100 mb-1 font-size-sm text-muted">{moment.utc(row.edited_on).format("DD/MM/YYYY")}</span>
+        <span className="d-inline-block w-100 font-size-sm text-muted">{moment.utc(row.edited_on).format("HH:mm")}</span>
       </div>
     </div>
   );

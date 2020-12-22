@@ -10,7 +10,11 @@ const LeadSchema = new Schema({
   category_type: {
     type: String,
   },
+  client_type: {
+    type: String,
+  },
   comments: [{
+    type: { type: String },
     created_on: { type: Date, defualt: Date.now },
     created_by: { type: Schema.Types.ObjectId, ref: "users" },
     content: { type: String }
@@ -37,9 +41,6 @@ const LeadSchema = new Schema({
     type: String,
   },
   email: {
-    type: String,
-  },
-  client_type: {
     type: String,
   },
   listing_link: {

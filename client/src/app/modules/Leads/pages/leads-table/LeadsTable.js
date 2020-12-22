@@ -78,7 +78,10 @@ export function LeadsTable() {
       sort: true,
       sortCaret: sortCaret,
       headerSortingClasses,
-      formatter: columnFormatters.BudgetColumnFormatter
+      formatter: columnFormatters.BudgetColumnFormatter,
+      style: {
+        minWidth: "100px",
+      },
     },
     {
       dataField: "last_action",
