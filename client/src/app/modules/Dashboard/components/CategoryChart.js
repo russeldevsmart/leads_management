@@ -1,15 +1,23 @@
 import React, { useEffect } from "react";
+import { shallowEqual, useSelector } from "react-redux";
 import ApexCharts from "apexcharts";
 
 export default function CategoryChart() {
+  const { leadsCategoryChartData } = useSelector(
+    (state) => ({
+      leadsCategoryChartData: state.dashboard.leadsCategoryChartData,
+    }),
+    shallowEqual
+  );
   useEffect(() => {
+    if (!leadsCategoryChartData) return;
     const category_chart_element = document.getElementById("leads_category_chart");
     
     if (!category_chart_element) {
       return;
     }
     
-    const chart = new ApexCharts(category_chart_element, getChartOption());
+    const chart = new ApexCharts(category_chart_element, getChartOption(leadsCategoryChartData));
     chart.render();
     return function cleanUp() {
       chart.destroy();
@@ -33,31 +41,19 @@ export default function CategoryChart() {
   );
 };
 
-function getChartOption() {
+function getChartOption(leadsCategoryChartData) {
   // Shared Colors Definition
   const primary = '#6993FF';
   const success = '#1BC5BD';
   const info = '#8950FC';
+  const infoLight = '#EEE5FF';
   const warning = '#FFA800';
   const danger = '#F64E60';
+  const gray = '#3F4254';
+  const green = '#1bf789';
 
   const options = {
-    series: [{
-        name: 'Marine Sprite',
-        data: [44, 55, 41, 37, 22, 43, 21]
-    }, {
-        name: 'Striking Calf',
-        data: [53, 32, 33, 52, 13, 43, 32]
-    }, {
-        name: 'Tank Picture',
-        data: [12, 17, 11, 9, 15, 11, 20]
-    }, {
-        name: 'Bucket Slope',
-        data: [9, 7, 5, 8, 6, 9, 4]
-    }, {
-        name: 'Reborn Kid',
-        data: [25, 12, 19, 32, 25, 24, 10]
-    }],
+    series: leadsCategoryChartData,
     chart: {
         type: 'bar',
         height: 350,
@@ -73,24 +69,12 @@ function getChartOption() {
         colors: ['#fff']
     },
     xaxis: {
-        categories: [2008, 2009, 2010, 2011, 2012, 2013, 2014],
-        labels: {
-            formatter: function (val) {
-                return val + "K"
-            }
-        }
+        categories: [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020],
     },
     yaxis: {
         title: {
             text: undefined
         },
-    },
-    tooltip: {
-        y: {
-            formatter: function (val) {
-                return val + "K"
-            }
-        }
     },
     fill: {
         opacity: 1
@@ -100,7 +84,7 @@ function getChartOption() {
         horizontalAlign: 'left',
         offsetX: 40
     },
-    colors: [primary, success, warning, danger, info]
+    colors: [primary, success, warning, danger, info, infoLight, gray, green]
   };
   
   return options;

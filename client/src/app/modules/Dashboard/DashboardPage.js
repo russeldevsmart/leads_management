@@ -5,7 +5,9 @@ import { LayoutSplashScreen } from "../../../_metronic/layout";
 import StatsWidgetCards from "./components/StatsWidgetCards";
 import WeeklyLeadsChart from "./components/WeeklyLeadsChart";
 import LeadsStatusChart from "./components/LeadsStatusChart";
+import LeadsTypeChart from "./components/LeadsTypeChart";
 import CategoryChart from "./components/CategoryChart";
+import LeadsSourceChart from "./components/LeadsSourceChart";
 import YearlyHeatmapChart from "./components/YearlyHeatmapChart";
 import ActionTimeline from "./components/ActionTimeline";
 
@@ -47,6 +49,14 @@ export default function Dashboard() {
                 </div>
                 <div className="col-lg-6">
                   <YearlyHeatmapChart />
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-lg-6">
+                  <LeadsTypeChart />
+                </div>
+                <div className="col-lg-6">
+                  <LeadsSourceChart />
                 </div>
               </div>
             </div>

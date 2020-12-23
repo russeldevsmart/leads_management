@@ -22,7 +22,7 @@ export function QuickUser() {
     <div id="kt_quick_user" className="offcanvas offcanvas-left offcanvas p-10">
       <div className="offcanvas-header d-flex align-items-center justify-content-between pb-5">
         <h3 className="font-weight-bold m-0">
-          User Profile
+          {user.fullname}
           {/* <small className="text-muted font-size-sm ml-2">12 messages</small> */}
         </h3>
         <a
@@ -109,66 +109,6 @@ export function QuickUser() {
                     update
                   </span>
                 </div>
-              </div>
-            </div>
-          </Link>
-
-          <Link to="/user-profile" className="navi-item">
-            <div className="navi-link">
-              <div className="symbol symbol-40 bg-light mr-3">
-                <div className="symbol-label">
-                  <span className="svg-icon svg-icon-md svg-icon-warning">
-                    <SVG
-                      src={toAbsoluteUrl(
-                        "/media/svg/icons/Shopping/Chart-bar1.svg"
-                      )}
-                    ></SVG>
-                  </span>
-                </div>
-              </div>
-              <div className="navi-text">
-                <div className="font-weight-bold">My Messages</div>
-                <div className="text-muted">Inbox and tasks</div>
-              </div>
-            </div>
-          </Link>
-
-          <Link to="/user-profile" className="navi-item">
-            <div className="navi-link">
-              <div className="symbol symbol-40 bg-light mr-3">
-                <div className="symbol-label">
-                  <span className="svg-icon svg-icon-md svg-icon-danger">
-                    <SVG
-                      src={toAbsoluteUrl(
-                        "/media/svg/icons/Files/Selected-file.svg"
-                      )}
-                    ></SVG>
-                  </span>
-                </div>
-              </div>
-              <div className="navi-text">
-                <div className="font-weight-bold">My Activities</div>
-                <div className="text-muted">Logs and notifications</div>
-              </div>
-            </div>
-          </Link>
-
-          <Link to="/user-profile" className="navi-item">
-            <div className="navi-link">
-              <div className="symbol symbol-40 bg-light mr-3">
-                <div className="symbol-label">
-                  <span className="svg-icon svg-icon-md svg-icon-primary">
-                    <SVG
-                      src={toAbsoluteUrl(
-                        "/media/svg/icons/Communication/Mail-opened.svg"
-                      )}
-                    ></SVG>
-                  </span>
-                </div>
-              </div>
-              <div className="navi-text">
-                <div className="font-weight-bold">My Tasks</div>
-                <div className="text-muted">latest tasks and projects</div>
               </div>
             </div>
           </Link>

@@ -251,10 +251,8 @@ export function LeadEditForm({
                           return (
                             <div className="form-group" key={index}>
                               {/* Year */}
-                              <Field
-                                id="year"
+                              <Select
                                 name="year"
-                                component={Select}
                                 label="Year"
                                 withFeedbackLabel={true}
                               >
@@ -265,7 +263,7 @@ export function LeadEditForm({
                                   )
                                 })
                               }
-                              </Field>
+                              </Select>
                             </div>
                           )
                         } else if (column === "service") {
@@ -328,7 +326,7 @@ export function LeadEditForm({
                                 component={NumberInput}
                                 placeholder={uiHelpers.columnLabel[column]}
                                 label={uiHelpers.columnLabel[column]}
-                                suffix=" CFA"
+                                suffix={`${column === 'mileage' ? ' KM' : ' CFA'}`}
                               />
                             </div>
                           )

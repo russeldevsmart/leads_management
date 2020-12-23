@@ -15,6 +15,17 @@ function daysInMonth(month, year) {
   return new Date(year, month, 0).getDate();
 }
 
+const categories = [
+  { name: "Voitures Neuves", value: "new_cars" },
+  { name: "Voitures Occasion", value: "used_cars" },
+  { name: "Rachat/Reprise", value: "buyout_takeover" },
+  { name: "Inspections", value: "inspection" },
+  { name: "Vérifications", value: "verification" },
+  { name: "Services", value: "services" },
+  { name: "Pièces de Rechange", value: "spare_parts" },
+  { name: "Demandes Supplémentaires", value: "other_requests" }
+];
+
 router.get("/get-dashboard-info", async (req, res) => {
   const start = new Date();
   start.setHours(0, 0, 0, 0);
@@ -103,6 +114,46 @@ router.get("/get-dashboard-info", async (req, res) => {
     }
   }
 
+  // leads type chart data
+  let leadTypeChartData = []
+  const types = [ "Particulier", "Professionnel", "Revendeur"];
+  for (let k = 0; k < 3; k ++) {
+    const number = await Lead.count({client_type: types[k]});
+    leadTypeChartData.push ( {label: types[k], count: number} );
+  }
+  let unkownCnt = await Lead.count({client_type: {$nin: types}});
+  leadTypeChartData.push ({label: "Unknown", count: unkownCnt});
+
+  // leads source chart data
+  let leadSourceChartData = []
+  const sources = ["Voitures.ci", "Whatsapp", "Sites Marques", "Facebook", "Instagram", "Téléphone", "Email", "Autre"]
+  for (let k = 0; k < 8; k ++) {
+    const number = await Lead.count({source: sources[k]});
+    leadSourceChartData.push ( {label: sources[k], count: number} );
+  }
+  unkownCnt = await Lead.count({source: {$nin: sources}});
+  leadSourceChartData.push ({label: "Unknown", count: unkownCnt});
+
+  // category chart data per day
+  let leadsCategoryChartData = [];
+  
+  for (let j = 0; j < 8; j ++) {
+    let data = [];  
+    for (k = 2010; k <= 2020; k ++) {
+      // console.log(k);
+      const startYear = new Date(k, 0, 1);
+      startYear.setHours(0, 0, 0, 0);
+      const lastYear = new Date(new Date().getFullYear(), 11, 31);
+      lastYear.setHours(23, 59, 59, 999);
+      const cntObj = await Lead.aggregate([
+        {$project: {name: 1, category: 1, year: {$year: '$created_on'}}},
+        {$match: {category: categories[j].value, year: k}},
+      ]);
+      data.push(cntObj.length);
+    }    
+    leadsCategoryChartData.push({name: categories[j].name, data});
+  }
+  
   return res.json({
     totalLeads,
     newLeads,
@@ -117,6 +168,9 @@ router.get("/get-dashboard-info", async (req, res) => {
     leadStatuChartData,
     yearlyHeatmapData,
     goneLeads,
+    leadTypeChartData,
+    leadsCategoryChartData,
+    leadSourceChartData
   });
 });
 

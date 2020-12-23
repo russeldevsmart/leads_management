@@ -9,6 +9,8 @@ const initialDashboardState = {
   weeklyLeadsChartData: null,
   leadsCategoryChartData: null,
   leadStatuChartData: null,
+  leadTypeChartData: null,
+  leadSourceChartData: null,
   yearlyHeatmapData: null,
   topLead: null,
   lastActions: [],
@@ -32,6 +34,9 @@ export const dashboardSlice = createSlice({
       state.weeklyLeadsChartData = action.payload.weeklyLeadsChartData;
       state.leadStatuChartData = action.payload.leadStatuChartData;
       state.yearlyHeatmapData = action.payload.yearlyHeatmapData;
+      state.leadTypeChartData = action.payload.leadTypeChartData;
+      state.leadsCategoryChartData = action.payload.leadsCategoryChartData;
+      state.leadSourceChartData = action.payload.leadSourceChartData;
     }
   }
 });
