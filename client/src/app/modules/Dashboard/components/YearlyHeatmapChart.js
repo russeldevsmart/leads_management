@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { shallowEqual, useSelector } from "react-redux";
 import ApexCharts from "apexcharts";
+import { useIntl } from "react-intl";
 
 export default function YearlyHeatmapChart() {
+  const intl = useIntl();
 
   const { yearlyHeatmapData } = useSelector(
     (state) => ({
@@ -31,7 +33,7 @@ export default function YearlyHeatmapChart() {
       <div className="card card-custom gutter-b">
         <div className="card-header">
             <div className="card-title">
-            <h3 className="card-label">Yearly Heatmap</h3>
+            <h3 className="card-label">{intl.formatMessage({ id: "DASHBOARD.YEARLY_HEATMAP" })}</h3>
             </div>
         </div>
         <div className="card-body">

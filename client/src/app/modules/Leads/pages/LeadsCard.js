@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { useIntl } from "react-intl";
 import {
   Card,
   CardBody,
@@ -10,6 +11,7 @@ import { LeadsGrouping } from "./leads-grouping/LeadsGrouping";
 import { useLeadsUIContext } from "./LeadsUIContext";
 
 export function LeadsCard() {
+  const intl = useIntl();
   const leadsUIContext = useLeadsUIContext();
   const leadsUIProps = useMemo(() => {
     return {
@@ -20,14 +22,14 @@ export function LeadsCard() {
 
   return (
     <Card>
-      <CardHeader title="Leads list">
+      <CardHeader title={intl.formatMessage({ id: "LEAD.LIST" })}>
         <CardHeaderToolbar>
           <button
             type="button"
             className="btn btn-primary"
             onClick={leadsUIProps.newLeadButtonClick}
           >
-            New Lead
+            {intl.formatMessage({ id: "LEAD.NEW" })}
           </button>
         </CardHeaderToolbar>
       </CardHeader>

@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { shallowEqual, useSelector } from "react-redux";
 import ApexCharts from "apexcharts";
+import { useIntl } from "react-intl";
 
 export default function LeadsSourceChart() {
+  const intl = useIntl();
   const { leadSourceChartData } = useSelector(
     (state) => ({
       leadSourceChartData: state.dashboard.leadSourceChartData,
@@ -31,7 +33,7 @@ export default function LeadsSourceChart() {
       <div className="card card-custom gutter-b">
         <div className="card-header">
           <div className="card-title">
-              <h3 className="card-label">Lead Source</h3>
+              <h3 className="card-label">{intl.formatMessage({ id: "DASHBOARD.LEAD_SOURCE" })}</h3>
           </div>
         </div>
         <div className="card-body">

@@ -62,9 +62,9 @@ export function Aside() {
     } else {
       document.body.classList.add("aside-secondary-disabled"); 
     }
-  }, [checkIsActive(location, "/leads")]);
+  }, [location]);
   
-  const getMenuItemActive = (url, hasSubmenu = false) => {
+  const getMenuItemActive = (url) => {
     return checkIsActive(location, url)
       ? ` active `
       : "";
@@ -87,10 +87,7 @@ export function Aside() {
 
               {/* begin::Item */}
               <li
-                className={`nav-item mb-3 ${getMenuItemActive(
-                  "/leads",
-                  false
-                )}`}
+                className={`nav-item mb-3 ${getMenuItemActive("/leads")}`}
                 data-toggle="tooltip"
                 data-placement="rigth"
                 data-container="body"

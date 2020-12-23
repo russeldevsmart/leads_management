@@ -7,6 +7,7 @@ import paginationFactory, {
   PaginationProvider,
 } from "react-bootstrap-table2-paginator";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { useIntl } from "react-intl";
 import * as actions from "../../_redux/leadsActions";
 import {
   getSelectRow,
@@ -22,6 +23,7 @@ import { Pagination } from "../../../../../_metronic/_partials/controls";
 import { useLeadsUIContext } from "../LeadsUIContext";
 
 export function LeadsTable() {
+  const intl = useIntl();
   // Leads UI Context
   const leadsUIContext = useLeadsUIContext();
   const leadsUIProps = useMemo(() => {
@@ -55,7 +57,7 @@ export function LeadsTable() {
   const columns = [
     {
       dataField: "lead_details",
-      text: "LEAD DETAILS",
+      text: intl.formatMessage({ id: "LEAD.DETAILS" }),
       sort: true,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -63,7 +65,7 @@ export function LeadsTable() {
     },
     {
       dataField: "interest_details",
-      text: "INTEREST DETAILS",
+      text: intl.formatMessage({ id: "LEAD.INTEREST_DETAILS" }),
       sort: true,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -74,7 +76,7 @@ export function LeadsTable() {
     },
     {
       dataField: "budget",
-      text: "BUDGET",
+      text: intl.formatMessage({ id: "LEAD.BUDGET" }),
       sort: true,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -85,7 +87,7 @@ export function LeadsTable() {
     },
     {
       dataField: "last_action",
-      text: "LAST ACTION",
+      text: intl.formatMessage({ id: "LEAD.LAST_ACTION" }),
       sort: true,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -93,7 +95,7 @@ export function LeadsTable() {
     },
     {
       dataField: "source",
-      text: "SOURCE",
+      text: intl.formatMessage({ id: "LEAD.SOURCE" }),
       sort: false,
       sortCaret: sortCaret,
       style: {
@@ -102,7 +104,7 @@ export function LeadsTable() {
     },
     {
       dataField: "status",
-      text: "STATUS",
+      text: intl.formatMessage({ id: "LEAD.STATUS" }),
       sort: true,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -110,7 +112,7 @@ export function LeadsTable() {
     },
     {
       dataField: "action",
-      text: "Actions",
+      text: intl.formatMessage({ id: "LEAD.ACTIONS" }),
       formatter: columnFormatters.ActionsColumnFormatter,
       formatExtraData: {
         openEditLeadDialog: leadsUIProps.openEditLeadDialog,

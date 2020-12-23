@@ -2,8 +2,10 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { shallowEqual, useSelector } from "react-redux";
 import moment from "moment";
+import { useIntl } from "react-intl";
 
 export default function ActionTimeline() {
+  const intl = useIntl();
 
   const { lastActions } = useSelector(
     (state) => ({
@@ -16,7 +18,7 @@ export default function ActionTimeline() {
     <div className="card card-custom gutter-b">
       <div className="card-header">
         <div className="card-title">
-          <h3 className="card-label">Last Actions</h3>
+          <h3 className="card-label">{intl.formatMessage({ id: "DASHBOARD.LAST_ACTIONS" })}</h3>
         </div>
       </div>
       <div className="card-body">

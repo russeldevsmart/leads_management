@@ -170,7 +170,7 @@ export function getInitLayoutConfig() {
         },
       },
       languages: {
-        display: false,
+        display: true,
       },
       "quick-panel": {
         display: false,

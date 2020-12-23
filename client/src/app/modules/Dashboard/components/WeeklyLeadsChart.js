@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { shallowEqual, useSelector } from "react-redux";
 import ApexCharts from "apexcharts";
+import { useIntl } from "react-intl";
 
 export default function WeeklyLeadsChart() {
+  const intl = useIntl();
 
   const { weeklyLeadsChartData } = useSelector(
     (state) => ({
@@ -33,7 +35,7 @@ export default function WeeklyLeadsChart() {
       <div className="card card-custom gutter-b">
         <div className="card-header">
             <div className="card-title">
-            <h3 className="card-label">Weekly Leads</h3>
+            <h3 className="card-label">{intl.formatMessage({ id: "DASHBOARD.WEEKLY_LEADS" })}</h3>
             </div>
         </div>
         <div className="card-body">
@@ -85,6 +87,14 @@ function getChartOption(weeklyLeadsChartData) {
     xaxis: {
       type: 'string',
       categories: weeklyLeadsChartData.label
+    },
+    yaxis: {
+      type: 'string',
+      labels: {
+        formatter: function (val) {
+          return val.toFixed(0)
+        }
+      }
     },
     colors: [primary, success]
   };

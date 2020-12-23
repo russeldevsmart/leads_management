@@ -1,11 +1,13 @@
 /* eslint-disable no-script-url,jsx-a11y/anchor-is-valid */
 import React from "react";
 import { useLocation } from "react-router";
+import { useIntl } from "react-intl";
 import { NavLink } from "react-router-dom";
 import SVG from "react-inlinesvg";
 import { toAbsoluteUrl, checkIsActive } from "../../../../_helpers";
 
 export function AsideMenuList({ layoutProps }) {
+  const intl = useIntl();
   const location = useLocation();
   const getMenuItemActive = (url, hasSubmenu = false) => {
     return checkIsActive(location, url)
@@ -19,7 +21,7 @@ export function AsideMenuList({ layoutProps }) {
       <ul className={`menu-nav ${layoutProps.ulClasses}`}>
         {/* begin::section */}
         <li className="menu-section ">
-          <h4 className="menu-text">Category</h4>
+          <h4 className="menu-text">{intl.formatMessage({ id: "MENU.CATEGORY" })}</h4>
           <i className="menu-icon flaticon-more-v2"></i>
         </li>
         {/* end:: section */}
@@ -33,7 +35,7 @@ export function AsideMenuList({ layoutProps }) {
             <span className="svg-icon menu-icon">
               <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Layers.svg")} />
             </span>
-            <span className="menu-text">Buy Cash</span>
+            <span className="menu-text">Voitures Neuves</span>
           </NavLink>
         </li>
         {/*end::1 Level*/}
@@ -47,7 +49,7 @@ export function AsideMenuList({ layoutProps }) {
             <span className="svg-icon menu-icon">
               <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Layers.svg")} />
             </span>
-            <span className="menu-text">Inspection</span>
+            <span className="menu-text">Voitures Occasion</span>
           </NavLink>
         </li>
         {/*end::1 Level*/}
@@ -61,7 +63,7 @@ export function AsideMenuList({ layoutProps }) {
             <span className="svg-icon menu-icon">
               <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Layers.svg")} />
             </span>
-            <span className="menu-text">Spare Parts</span>
+            <span className="menu-text">Rachat/Reprise</span>
           </NavLink>
         </li>
         {/*end::1 Level*/}
@@ -75,7 +77,7 @@ export function AsideMenuList({ layoutProps }) {
             <span className="svg-icon menu-icon">
               <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Layers.svg")} />
             </span>
-            <span className="menu-text">Used Cars</span>
+            <span className="menu-text">Inspections</span>
           </NavLink>
         </li>
         {/*end::1 Level*/}
@@ -89,7 +91,7 @@ export function AsideMenuList({ layoutProps }) {
             <span className="svg-icon menu-icon">
               <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Layers.svg")} />
             </span>
-            <span className="menu-text">Verification</span>
+            <span className="menu-text">Vérifications</span>
           </NavLink>
         </li>
         {/*end::1 Level*/}
@@ -117,7 +119,7 @@ export function AsideMenuList({ layoutProps }) {
             <span className="svg-icon menu-icon">
               <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Layers.svg")} />
             </span>
-            <span className="menu-text">Other Requests</span>
+            <span className="menu-text">Pièces de Rechange</span>
           </NavLink>
         </li>
         {/*end::1 Level*/}
@@ -131,7 +133,7 @@ export function AsideMenuList({ layoutProps }) {
             <span className="svg-icon menu-icon">
               <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Layers.svg")} />
             </span>
-            <span className="menu-text">New Cars</span>
+            <span className="menu-text">Demandes Supplémentaires</span>
           </NavLink>
         </li>
         {/*end::1 Level*/}
