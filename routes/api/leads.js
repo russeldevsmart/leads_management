@@ -287,8 +287,9 @@ router.post("/create", (req, res) => {
 
 router.post("/find", async (req, res) => {
   const { queryParams } = req.body;
-  const totalCount = await Lead.count();
-  Lead.find({})
+  const findQuery = queryParams.category ? { category: queryParams.category } : {};
+  const totalCount = await Lead.count(findQuery);
+  Lead.find(findQuery)
     .skip(queryParams.pageSize * (queryParams.pageNumber - 1))
     .limit(queryParams.pageSize)
     .sort({ [queryParams.sortField]: -1, created_by: 1 })
@@ -302,6 +303,7 @@ router.post("/find", async (req, res) => {
       return res.json({
         totalCount,
         entities: docs,
+        category: queryParams.category? queryParams.category : null
       });
     });
 });

@@ -36,8 +36,8 @@ export const fetchLeads = queryParams => dispatch => {
   return requestFromServer
     .findLeads(queryParams)
     .then(response => {
-      const { totalCount, entities } = response.data;
-      dispatch(actions.leadsFetched({ totalCount, entities }));
+      const { totalCount, entities, category } = response.data;
+      dispatch(actions.leadsFetched({ totalCount, entities, category }));
     })
     .catch(error => {
       error.clientMessage = "Can't find leads";

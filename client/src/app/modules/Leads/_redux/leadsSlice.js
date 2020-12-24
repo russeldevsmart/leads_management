@@ -7,7 +7,8 @@ const initialLeadsState = {
   entities: null,
   makes: null,
   leadForEdit: undefined,
-  lastError: null
+  lastError: null,
+  listCategory: null,
 };
 export const callTypes = {
   list: "list",
@@ -46,11 +47,12 @@ export const leadsSlice = createSlice({
     },
     // findLeads
     leadsFetched: (state, action) => {
-      const { totalCount, entities } = action.payload;
+      const { totalCount, entities, category } = action.payload;
       state.listLoading = false;
       state.error = null;
       state.entities = entities;
       state.totalCount = totalCount;
+      state.listCategory = category;
     },
     // createLead
     leadCreated: (state, action) => {
