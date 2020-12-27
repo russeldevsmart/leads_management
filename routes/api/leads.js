@@ -33,12 +33,12 @@ router.get("/get-dashboard-info", async (req, res) => {
   const end = new Date();
   end.setHours(23, 59, 59, 999);
 
-  const totalLeads = await Lead.count({});
-  const newLeads = await Lead.count({ status: "Nouveau" });
-  const ongoingLeads = await Lead.count({
+  const totalLeads = await Lead.countDocuments({});
+  const newLeads = await Lead.countDocuments({ status: "Nouveau" });
+  const ongoingLeads = await Lead.countDocuments({
     status: { $nin: ["Nouveau", "Perdu"] },
   });
-  const goneLeads = await Lead.count({ status: "Perdu" });
+  const goneLeads = await Lead.countDocuments({ status: "Perdu" });
   const lastActions = await Action.find({})
     .sort({ date: -1 })
     .populate("lead")
@@ -65,7 +65,7 @@ router.get("/get-dashboard-info", async (req, res) => {
     td_start.setHours(0, 0, 0, 0);
     const td_end = new Date(d);
     td_end.setHours(23, 59, 59, 999);
-    const cnt = await Lead.count({
+    const cnt = await Lead.countDocuments({
       created_on: { $gte: td_start, $lt: td_end },
     });
 
@@ -73,7 +73,7 @@ router.get("/get-dashboard-info", async (req, res) => {
     nd_start.getHours(0, 0, 0, 0);
     const nd_end = new Date(d.getTime() - 6 * 24 * 60 * 60 * 1000);
     nd_end.getHours(23, 59, 59, 999);
-    const cnt1 = await Lead.count({
+    const cnt1 = await Lead.countDocuments({
       created_on: { $gte: nd_start, $lt: nd_end },
     });
     weeklyChartData.push(cnt);
@@ -107,7 +107,7 @@ router.get("/get-dashboard-info", async (req, res) => {
       d_end.setMonth(d);
       d_end.setDate(dd);
       d_end.setHours(23, 23, 59, 999);
-      const cnt = await Lead.count({
+      const cnt = await Lead.countDocuments({
         created_on: { $gte: d_start, $lt: d_end },
       });
       yearlyHeatmapData[mon].push({ x: dd, y: cnt });
@@ -118,42 +118,46 @@ router.get("/get-dashboard-info", async (req, res) => {
   let leadTypeChartData = []
   const types = [ "Particulier", "Professionnel", "Revendeur"];
   for (let k = 0; k < 3; k ++) {
-    const number = await Lead.count({client_type: types[k]});
+    const number = await Lead.countDocuments({client_type: types[k]});
     leadTypeChartData.push ( {label: types[k], count: number} );
   }
-  let unkownCnt = await Lead.count({client_type: {$nin: types}});
+  let unkownCnt = await Lead.countDocuments({client_type: {$nin: types}});
   leadTypeChartData.push ({label: "Unknown", count: unkownCnt});
 
   // leads source chart data
   let leadSourceChartData = []
   const sources = ["Voitures.ci", "Whatsapp", "Sites Marques", "Facebook", "Instagram", "Téléphone", "Email", "Autre"]
   for (let k = 0; k < 8; k ++) {
-    const number = await Lead.count({source: sources[k]});
+    const number = await Lead.countDocuments({source: sources[k]});
     leadSourceChartData.push ( {label: sources[k], count: number} );
   }
-  unkownCnt = await Lead.count({source: {$nin: sources}});
+  unkownCnt = await Lead.countDocuments({source: {$nin: sources}});
   leadSourceChartData.push ({label: "Unknown", count: unkownCnt});
 
   // category chart data per day
   let leadsCategoryChartData = [];
+  let last7DaysLabel = [];
   
   for (let j = 0; j < 8; j ++) {
-    let data = [];  
-    for (k = 2010; k <= 2020; k ++) {
-      // console.log(k);
-      const startYear = new Date(k, 0, 1);
-      startYear.setHours(0, 0, 0, 0);
-      const lastYear = new Date(new Date().getFullYear(), 11, 31);
-      lastYear.setHours(23, 59, 59, 999);
-      const cntObj = await Lead.aggregate([
-        {$project: {name: 1, category: 1, year: {$year: '$created_on'}}},
-        {$match: {category: categories[j].value, year: k}},
-      ]);
-      data.push(cntObj.length);
-    }    
+    let data = [];
+    
+    const date = new Date();
+    const last_7_days = new Date(date.getTime() - 6 * 24 * 60 * 60 * 1000);
+    for (const d = last_7_days; d <= new Date(); d.setDate(d.getDate() + 1)) {
+      const td_start = new Date(d);
+      td_start.setHours(0, 0, 0, 0);
+      const td_end = new Date(d);
+      td_end.setHours(23, 59, 59, 999);
+      const cnt = await Lead.countDocuments({
+        source: sources[j],
+        created_on: { $gte: td_start, $lt: td_end },
+      });
+      data.push(cnt);
+      if (last7DaysLabel.length < 7)
+        last7DaysLabel.push(moment(d).format("Do MMM"));
+    }
     leadsCategoryChartData.push({name: categories[j].name, data});
   }
-  
   return res.json({
     totalLeads,
     newLeads,
@@ -169,7 +173,10 @@ router.get("/get-dashboard-info", async (req, res) => {
     yearlyHeatmapData,
     goneLeads,
     leadTypeChartData,
-    leadsCategoryChartData,
+    leadsCategoryChartData: {
+      data: leadsCategoryChartData,
+      categories: last7DaysLabel
+    },
     leadSourceChartData
   });
 });
@@ -288,7 +295,7 @@ router.post("/create", (req, res) => {
 router.post("/find", async (req, res) => {
   const { queryParams } = req.body;
   const findQuery = queryParams.category ? { category: queryParams.category } : {};
-  const totalCount = await Lead.count(findQuery);
+  const totalCount = await Lead.countDocuments(findQuery);
   Lead.find(findQuery)
     .skip(queryParams.pageSize * (queryParams.pageNumber - 1))
     .limit(queryParams.pageSize)

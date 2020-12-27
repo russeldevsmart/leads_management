@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useIntl } from "react-intl";
 import { useSelector, shallowEqual, connect } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -11,6 +12,7 @@ import * as auth from "../Auth";
 import { changePassword } from "../Auth/_redux/authCrud";
 
 function ChangePassword(props) {
+  const intl = useIntl();
   // Fields
   const [loading, setloading] = useState(false);
   const [isError, setisError] = useState(false);
@@ -82,10 +84,10 @@ function ChangePassword(props) {
       <div className="card-header py-3">
         <div className="card-title align-items-start flex-column">
           <h3 className="card-label font-weight-bolder text-dark">
-            Change Password
+            {intl.formatMessage({id: "PROFILE.CHANGE_PASSWORD"})}
           </h3>
           <span className="text-muted font-weight-bold font-size-sm mt-1">
-            Change your account password
+            {intl.formatMessage({id: "PROFILE.CHANGE_YOUR_PASSWORD"})}
           </span>
         </div>
         <div className="card-toolbar">
@@ -96,14 +98,14 @@ function ChangePassword(props) {
               formik.isSubmitting || (formik.touched && !formik.isValid)
             }
           >
-            Save Changes
+            {intl.formatMessage({id: "FORM.SAVE_CHANGES"})}
             {formik.isSubmitting}
           </button>
           <Link
             to="/user-profile/profile-overview"
             className="btn btn-secondary"
           >
-            Cancel
+            {intl.formatMessage({id: "FORM.CANCEL"})}
           </Link>
         </div>
       </div>
@@ -144,12 +146,12 @@ function ChangePassword(props) {
           {/* end::Alert */}
           <div className="form-group row">
             <label className="col-xl-3 col-lg-3 col-form-label text-alert">
-              Current Password
+              {intl.formatMessage({id: "PROFILE.CURRENT_PASSWORD"})}
             </label>
             <div className="col-lg-9 col-xl-6">
               <input
                 type="password"
-                placeholder="Current Password"
+                placeholder={intl.formatMessage({id: "PROFILE.CURRENT_PASSWORD"})}
                 className={`form-control form-control-lg form-control-solid mb-2 ${getInputClasses(
                   "currentPassword"
                 )}`}
@@ -163,18 +165,18 @@ function ChangePassword(props) {
                 </div>
               ) : null}
               <a href="#" className="text-sm font-weight-bold">
-                Forgot password ?
+                {intl.formatMessage({id: "PROFILE.FORGOT_PASSWORD"})} ?
               </a>
             </div>
           </div>
           <div className="form-group row">
             <label className="col-xl-3 col-lg-3 col-form-label text-alert">
-              New Password
+              {intl.formatMessage({id: "PROFILE.NEW_PASSWORD"})}
             </label>
             <div className="col-lg-9 col-xl-6">
               <input
                 type="password"
-                placeholder="New Password"
+                placeholder={intl.formatMessage({id: "PROFILE.NEW_PASSWORD"})}
                 className={`form-control form-control-lg form-control-solid ${getInputClasses(
                   "password"
                 )}`}
@@ -188,12 +190,12 @@ function ChangePassword(props) {
           </div>
           <div className="form-group row">
             <label className="col-xl-3 col-lg-3 col-form-label text-alert">
-              Verify Password
+              {intl.formatMessage({id: "PROFILE.VERIFY_PASSWORD"})}
             </label>
             <div className="col-lg-9 col-xl-6">
               <input
                 type="password"
-                placeholder="Verify Password"
+                placeholder={intl.formatMessage({id: "PROFILE.VERIFY_PASSWORD"})}
                 className={`form-control form-control-lg form-control-solid ${getInputClasses(
                   "cPassword"
                 )}`}

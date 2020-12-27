@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { shallowEqual, useSelector } from "react-redux";
 import { useIntl } from "react-intl";
 import {
   Card,
@@ -9,8 +10,16 @@ import {
 import { LeadsTable } from "./leads-table/LeadsTable";
 import { LeadsGrouping } from "./leads-grouping/LeadsGrouping";
 import { useLeadsUIContext } from "./LeadsUIContext";
+import * as uiHelpers from "./LeadsUIHelpers";
 
 export function LeadsCard() {
+  const { listCategory } = useSelector(
+    (state) => ({
+      listCategory: state.leads.listCategory,
+    }),
+    shallowEqual
+  );
+  
   const intl = useIntl();
   const leadsUIContext = useLeadsUIContext();
   const leadsUIProps = useMemo(() => {
@@ -22,7 +31,7 @@ export function LeadsCard() {
 
   return (
     <Card>
-      <CardHeader title={intl.formatMessage({ id: "LEAD.LIST" })}>
+      <CardHeader title={`${listCategory ? uiHelpers.getCategoryName(listCategory) : "All"} - ${intl.formatMessage({ id: "LEAD.LIST" })}`}>
         <CardHeaderToolbar>
           <button
             type="button"

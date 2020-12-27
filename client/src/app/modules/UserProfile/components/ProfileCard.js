@@ -1,11 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import { useIntl } from "react-intl";
 import { shallowEqual, useSelector } from "react-redux";
 import SVG from "react-inlinesvg";
 import { toAbsoluteUrl } from "../../../../_metronic/_helpers";
 
 export function ProfileCard() {
+  const intl = useIntl();
   const user = useSelector(({ auth }) => auth.user, shallowEqual);
 
   useEffect(() => {
@@ -38,17 +40,17 @@ export function ProfileCard() {
               {/* begin::Contact */}
               <div className="py-9">
                 <div className="d-flex align-items-center justify-content-between mb-2">
-                  <span className="font-weight-bold mr-2">Email:</span>
+                  <span className="font-weight-bold mr-2">{intl.formatMessage({id: "PROFILE.EMAIL"})}:</span>
                   <span className="text-muted text-hover-primary">
                     {user.email}
                   </span>
                 </div>
                 <div className="d-flex align-items-center justify-content-between mb-2">
-                  <span className="font-weight-bold mr-2">Phone:</span>
+                  <span className="font-weight-bold mr-2">{intl.formatMessage({id: "PROFILE.PHONE"})}:</span>
                   <span className="text-muted">{user.phone}</span>
                 </div>
                 <div className="d-flex align-items-center justify-content-between">
-                  <span className="font-weight-bold mr-2">Location:</span>
+                  <span className="font-weight-bold mr-2">{intl.formatMessage({id: "PROFILE.LOCATION"})}:</span>
                   {/* <span className="text-muted">{user.address.city}</span> */}
                 </div>
               </div>
@@ -71,7 +73,7 @@ export function ProfileCard() {
                       </span>
                     </span>
                     <span className="navi-text font-size-lg">
-                      Personal Information
+                      {intl.formatMessage({id: "PROFILE.PERSONAL_INFORMATION"})}
                     </span>
                   </NavLink>
                 </div>
@@ -91,7 +93,7 @@ export function ProfileCard() {
                       </span>
                     </span>
                     <span className="navi-text font-size-lg">
-                      Account Information
+                      {intl.formatMessage({id: "PROFILE.ACCOUNT_INFORMATION"})}
                     </span>
                   </NavLink>
                 </div>
@@ -111,12 +113,7 @@ export function ProfileCard() {
                       </span>
                     </span>
                     <span className="navi-text font-size-lg">
-                      Change Password
-                    </span>
-                    <span className="navi-label">
-                      <span className="label label-light-danger label-rounded font-weight-bold">
-                        5
-                      </span>
+                      {intl.formatMessage({id: "PROFILE.CHANGE_PASSWORD"})}
                     </span>
                   </NavLink>
                 </div>

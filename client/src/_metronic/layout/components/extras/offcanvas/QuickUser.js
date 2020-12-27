@@ -1,12 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import { Link } from "react-router-dom";
+import { useIntl } from "react-intl";
 import { shallowEqual, useSelector } from "react-redux";
 import SVG from "react-inlinesvg";
 import { useHistory } from "react-router-dom";
 import { toAbsoluteUrl } from "../../../../_helpers";
 
 export function QuickUser() {
+  const intl = useIntl();
   const history = useHistory();
   const user = useSelector((state) => state.auth.user, shallowEqual);
 
@@ -80,7 +82,7 @@ export function QuickUser() {
               className="btn btn-light-primary btn-bold"
               onClick={logoutClick}
             >
-              Sign out
+              {intl.formatMessage({id: "PROFILE.SIGN_OUT"})}
             </button>
           </div>
         </div>
@@ -102,12 +104,9 @@ export function QuickUser() {
                 </div>
               </div>
               <div className="navi-text">
-                <div className="font-weight-bold">My Profile</div>
+                <div className="font-weight-bold">{intl.formatMessage({id: "PROFILE.MY_PROFILE"})}</div>
                 <div className="text-muted">
-                  Account settings and more{" "}
-                  <span className="label label-light-danger label-inline font-weight-bold">
-                    update
-                  </span>
+                  {intl.formatMessage({id: "PROFILE.ACCOUNT_SETTING_AND_MORE"})}
                 </div>
               </div>
             </div>

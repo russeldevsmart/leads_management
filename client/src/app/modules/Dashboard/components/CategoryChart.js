@@ -42,18 +42,21 @@ export default function CategoryChart() {
 };
 
 function getChartOption(leadsCategoryChartData) {
+  const series = leadsCategoryChartData.data;
+  const categories = leadsCategoryChartData.categories;
+  
   // Shared Colors Definition
   const primary = '#6993FF';
   const success = '#1BC5BD';
   const info = '#8950FC';
-  const infoLight = '#EEE5FF';
+  const infoLight = '#A1E41E';
   const warning = '#FFA800';
   const danger = '#F64E60';
   const gray = '#3F4254';
   const green = '#1bf789';
 
   const options = {
-    series: leadsCategoryChartData,
+    series: series,
     chart: {
         type: 'bar',
         height: 350,
@@ -69,17 +72,7 @@ function getChartOption(leadsCategoryChartData) {
         colors: ['#fff']
     },
     xaxis: {
-      categories: [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020],
-    },
-    yaxis: {
-      title: {
-          text: undefined
-      },
-      labels: {
-        formatter: function (val) {
-          return val.toFixed(0)
-        }
-      }
+      categories: categories,
     },
     fill: {
         opacity: 1

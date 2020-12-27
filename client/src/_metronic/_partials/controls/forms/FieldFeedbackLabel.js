@@ -1,27 +1,27 @@
 import React from "react";
+import { useIntl } from "react-intl";
 
-const inputLabel = ({ label, touched, error, customFeedbackLabel }) => {
+const inputLabel = ({ label, touched, error, customFeedbackLabel, intl }) => {
   if (touched && error) {
     return <div className="invalid-feedback">{error}</div>;
   }
 
   if (touched && !error && label) {
-    return <div className="valid-feedback">{label} was entered correct</div>;
+    return <div className="valid-feedback">{intl.formatMessage({id: "FORM.INPUT_FEEDBACK_CORRECT"}, { name: label })}</div>;
   }
 
   return (
     <div className="feedback">
       {customFeedbackLabel && <>{customFeedbackLabel}</>}
       {!customFeedbackLabel && (
-        <>
-          Please enter <b>{label}</b>
-        </>
+        <span dangerouslySetInnerHTML={{ __html: intl.formatMessage({id: "FORM.INPUT_FEEDBACK_LABEL"}, {name: label}) }}>
+        </span>
       )}
     </div>
   );
 };
 
-const selectLabel = ({ label, touched, error, customFeedbackLabel }) => {
+const selectLabel = ({ label, touched, error, customFeedbackLabel, intl }) => {
   if (touched && error) {
     return <div className="invalid-feedback">{error}</div>;
   }
@@ -30,9 +30,8 @@ const selectLabel = ({ label, touched, error, customFeedbackLabel }) => {
     <div className="feedback">
       {customFeedbackLabel && <>{customFeedbackLabel}</>}
       {!customFeedbackLabel && label && (
-        <>
-          Please select <b>{label}</b>
-        </>
+        <span dangerouslySetInnerHTML={{ __html: intl.formatMessage({id: "FORM.SELECT_FEEDBACK_LABEL"}, {name: label}) }}>
+        </span>
       )}
     </div>
   );
@@ -45,20 +44,21 @@ export function FieldFeedbackLabel({
   type,
   customFeedbackLabel
 }) {
+  const intl = useIntl();
   switch (type) {
     case "text":
-      return inputLabel({ label, touched, error, customFeedbackLabel });
+      return inputLabel({ label, touched, error, customFeedbackLabel, intl });
     case "tel":
-      return inputLabel({ label, touched, error, customFeedbackLabel });
+      return inputLabel({ label, touched, error, customFeedbackLabel, intl });
     case "number":
-      return inputLabel({ label, touched, error, customFeedbackLabel });
+      return inputLabel({ label, touched, error, customFeedbackLabel, intl });
     case "textarea":
-      return inputLabel({ label, touched, error, customFeedbackLabel });
+      return inputLabel({ label, touched, error, customFeedbackLabel, intl });
     case "email":
-      return inputLabel({ label, touched, error, customFeedbackLabel });
+      return inputLabel({ label, touched, error, customFeedbackLabel, intl });
     case "password":
-      return inputLabel({ label, touched, error, customFeedbackLabel });
+      return inputLabel({ label, touched, error, customFeedbackLabel, intl });
     default:
-      return selectLabel({ label, touched, error, customFeedbackLabel });
+      return selectLabel({ label, touched, error, customFeedbackLabel, intl });
   }
 }

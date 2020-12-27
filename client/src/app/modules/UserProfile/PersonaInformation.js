@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useIntl } from "react-intl";
 import { useSelector, shallowEqual, connect, useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -9,7 +10,7 @@ import * as auth from "../Auth";
 import { updateUser } from "../Auth/_redux/authCrud";
 
 function PersonaInformation(props) {
-  
+  const intl = useIntl();
   // Fields
   const [loading, setloading] = useState(false);
   const [pic, setPic] = useState("");
@@ -117,10 +118,10 @@ function PersonaInformation(props) {
       <div className="card-header py-3">
         <div className="card-title align-items-start flex-column">
           <h3 className="card-label font-weight-bolder text-dark">
-            Personal Information
+            {intl.formatMessage({id: "PROFILE.PERSONAL_INFORMATION"})}
           </h3>
           <span className="text-muted font-weight-bold font-size-sm mt-1">
-            Update your personal informaiton
+            {intl.formatMessage({id: "PROFILE.UPDATE_PERSONAL_INFORMATION"})}
           </span>
         </div>
         <div className="card-toolbar">
@@ -131,14 +132,14 @@ function PersonaInformation(props) {
               formik.isSubmitting || (formik.touched && !formik.isValid)
             }
           >
-            Save Changes
+            {intl.formatMessage({id: "FORM.SAVE_CHANGES"})}
             {formik.isSubmitting}
           </button>
           <Link
             to="/user-profile/personal-information"
             className="btn btn-secondary"
           >
-            Cancel
+            {intl.formatMessage({id: "FORM.CANCEL"})}
           </Link>
         </div>
       </div>
@@ -150,11 +151,11 @@ function PersonaInformation(props) {
           <div className="row">
             <label className="col-xl-3"></label>
             <div className="col-lg-9 col-xl-6">
-              <h5 className="font-weight-bold mb-6">Customer Info</h5>
+              <h5 className="font-weight-bold mb-6">{intl.formatMessage({id: "PROFILE.CUSTOMER_INFO"})}</h5>
             </div>
           </div>
           <div className="form-group row">
-            <label className="col-xl-3 col-lg-3 col-form-label">Avatar</label>
+            <label className="col-xl-3 col-lg-3 col-form-label">{intl.formatMessage({id: "PROFILE.AVATAR"})}</label>
             <div className="col-lg-9 col-xl-6">
               <div
                 className="image-input image-input-outline"
@@ -207,18 +208,18 @@ function PersonaInformation(props) {
                 </span>
               </div>
               <span className="form-text text-muted">
-                Allowed file types: png, jpg, jpeg.
+                {intl.formatMessage({id: "PROFILE.ALLOWED_FILE_TYPES"})}: png, jpg, jpeg.
               </span>
             </div>
           </div>
           <div className="form-group row">
             <label className="col-xl-3 col-lg-3 col-form-label">
-              Full Name
+              {intl.formatMessage({id: "PROFILE.FULL_NAME"})}
             </label>
             <div className="col-lg-9 col-xl-6">
               <input
                 type="text"
-                placeholder="First name"
+                placeholder={intl.formatMessage({id: "PROFILE.FULL_NAME"})}
                 className={`form-control form-control-lg form-control-solid ${getInputClasses(
                   "fullname"
                 )}`}
@@ -234,31 +235,27 @@ function PersonaInformation(props) {
           </div>
           <div className="form-group row">
             <label className="col-xl-3 col-lg-3 col-form-label">
-              Company Name
+              {intl.formatMessage({id: "PROFILE.COMPANY_NAME"})}
             </label>
             <div className="col-lg-9 col-xl-6">
               <input
                 type="text"
-                placeholder="Company name"
+                placeholder={intl.formatMessage({id: "PROFILE.COMPANY_NAME"})}
                 className={`form-control form-control-lg form-control-solid`}
                 name="companyName"
                 {...formik.getFieldProps("companyName")}
               />
-              <span className="form-text text-muted">
-                If you want your invoices addressed to a company. Leave blank to
-                use your full name.
-              </span>
             </div>
           </div>
           <div className="row">
             <label className="col-xl-3"></label>
             <div className="col-lg-9 col-xl-6">
-              <h5 className="font-weight-bold mt-10 mb-6">Contact Info</h5>
+              <h5 className="font-weight-bold mt-10 mb-6">{intl.formatMessage({id: "PROFILE.CONTACT_INFO"})}</h5>
             </div>
           </div>
           <div className="form-group row">
             <label className="col-xl-3 col-lg-3 col-form-label">
-              Contact Phone
+              {intl.formatMessage({id: "PROFILE.CONTACT_PHONE"})}
             </label>
             <div className="col-lg-9 col-xl-6">
               <div className="input-group input-group-lg input-group-solid">
@@ -289,7 +286,7 @@ function PersonaInformation(props) {
           </div>
           <div className="form-group row">
             <label className="col-xl-3 col-lg-3 col-form-label">
-              Email Address
+              {intl.formatMessage({id: "PROFILE.EMAIL_ADDRESS"})}
             </label>
             <div className="col-lg-9 col-xl-6">
               <div className="input-group input-group-lg input-group-solid">
@@ -300,7 +297,7 @@ function PersonaInformation(props) {
                 </div>
                 <input
                   type="email"
-                  placeholder="Email"
+                  placeholder={intl.formatMessage({id: "PROFILE.EMAIL"})}
                   className={`form-control form-control-lg form-control-solid ${getInputClasses(
                     "email"
                   )}`}
@@ -317,7 +314,7 @@ function PersonaInformation(props) {
           </div>
           <div className="form-group row">
             <label className="col-xl-3 col-lg-3 col-form-label">
-              Company Site
+              {intl.formatMessage({id: "PROFILE.COMPANY_SITE"})}
             </label>
             <div className="col-lg-9 col-xl-6">
               <div className="input-group input-group-lg input-group-solid">

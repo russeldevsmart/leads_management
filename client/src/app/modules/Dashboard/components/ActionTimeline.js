@@ -1,5 +1,4 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
 import { shallowEqual, useSelector } from "react-redux";
 import moment from "moment";
 import { useIntl } from "react-intl";
@@ -43,26 +42,34 @@ export default function ActionTimeline() {
                   <div className="font-weight-mormal timeline-content text-muted pl-3">
                     {
                       action.action_type === 'lead_created' && (
-                        <>
-                        <span className="font-weight-bolder text-dark-75 font-size-lg">{action.user.fullname}</span>&nbsp;
-                          created the lead - <NavLink className="menu-link" to={`/leads/${action.lead._id}/edit`}>{action.lead.name}</NavLink>
-                        </>
+                        <div dangerouslySetInnerHTML={{ 
+                          __html: intl.formatMessage({id: "ACTIONS.LEAD.CREATED"}, {
+                            name: `<span class="font-weight-bolder text-dark-75 font-size-lg">${action.user.fullname}</span>`,
+                            lead: `<a href="/leads/${action.lead._id}/edit" class="menu-link">${action.lead.name}</a>`
+                          })
+                        }}></div>
                       )
                     }
                     {
                       action.action_type === 'lead_comments' && (
-                        <>
-                        <span className="font-weight-bolder text-dark-75 font-size-lg">{action.user.fullname}</span>&nbsp;
-                          left the comment - <span className="font-weight-bold text-dark-75">{action.content}</span> in <NavLink className="menu-link" to={`/leads/${action.lead._id}/edit`}>{action.lead.name}</NavLink>
-                        </>
+                        <div dangerouslySetInnerHTML={{ 
+                          __html: intl.formatMessage({id: "ACTIONS.LEAD.WRITE_COMMENT"}, {
+                            name: `<span class="font-weight-bolder text-dark-75 font-size-lg">${action.user.fullname}</span>`,
+                            comment: `<span class="font-weight-bold text-dark-75">${action.content}</span>`,
+                            lead: `<a href="/leads/${action.lead._id}/edit" class="menu-link">${action.lead.name}</a>`
+                          })
+                        }}></div>
                       )
                     }
                     {
                       action.action_type === 'lead_updated' && (
-                        <>
-                        <span className="font-weight-bolder text-dark-75 font-size-lg">{action.user.fullname}</span> &nbsp;
-                          udpated the <span className="font-weight-bold text-dark-75">{action.content}</span> in <NavLink className="menu-link" to={`/leads/${action.lead._id}/edit`}>{action.lead.name}</NavLink>
-                        </>
+                        <div dangerouslySetInnerHTML={{ 
+                          __html: intl.formatMessage({id: "ACTIONS.LEAD.UPDATED"}, {
+                            name: `<span class="font-weight-bolder text-dark-75 font-size-lg">${action.user.fullname}</span>`,
+                            content: `<span class="font-weight-bold text-dark-75">${action.content}</span>`,
+                            lead: `<a href="/leads/${action.lead._id}/edit" class="menu-link">${action.lead.name}</a>`
+                          })
+                        }}></div>
                       )
                     }
                   </div>

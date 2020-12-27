@@ -2,6 +2,7 @@ import React from "react";
 import {useField, useFormikContext} from "formik";
 import {FieldFeedbackLabel} from "./FieldFeedbackLabel";
 import CustomSelect from "react-select";
+import { useIntl } from "react-intl";
 
 const getFieldCSSClasses = (touched, errors) => {
   const classes = ["form-control", "form-control-solid"];
@@ -62,6 +63,7 @@ export function Select({
 export function SearchSelect({ ...props }) {
   const { setFieldValue } = useFormikContext();
   const [field] = useField(props);
+  const intl = useIntl();
   return (
     <>
       {/* {props.label && <label>Select {props.label}</label>} */}
@@ -84,9 +86,8 @@ export function SearchSelect({ ...props }) {
       />
       <div className="feedback">
         {props.label && (
-          <>
-            Please select <b>{props.label}</b>
-          </>
+          <span dangerouslySetInnerHTML={{ __html: intl.formatMessage({id: "FORM.SELECT_FEEDBACK_LABEL"}, {name: props.label}) }}>
+          </span>
         )}
       </div>
     </>

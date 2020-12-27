@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useMemo } from "react";
 import { useLocation } from "react-router";
+import { useIntl } from "react-intl";
 import { NavLink } from "react-router-dom";
 import objectPath from "object-path";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
@@ -14,6 +15,7 @@ import { QuickUserToggler } from "../extras/QuickUserToggler";
 import { Brand } from "../brand/Brand";
 
 export function Aside() {
+  const intl = useIntl();
   const uiService = useHtmlClassService();
   const location = useLocation();
   const layoutProps = useMemo(() => {
@@ -98,7 +100,7 @@ export function Aside() {
                   placement="right"
                   overlay={
                     <Tooltip id="project-management">
-                      All Leads
+                      {intl.formatMessage({id: "TOOLTIP.ALL_LEADS"})}
                     </Tooltip>
                   }
                 >
@@ -126,7 +128,7 @@ export function Aside() {
                 <>
                   <OverlayTrigger
                     placement="right"
-                    overlay={<Tooltip id="toggle-aside">Toggle Aside</Tooltip>}
+                    overlay={<Tooltip id="toggle-aside">{intl.formatMessage({id: "TOOLTIP.TOGGLE_ASIDE"})}</Tooltip>}
                   >
                     <span
                       className={`aside-toggle btn btn-icon btn-primary btn-hover-primary shadow-sm ${checkIsActive(location, "/leads") ? "" : "d-none"}`}

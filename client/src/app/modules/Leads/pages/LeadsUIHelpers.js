@@ -33,22 +33,6 @@ export const categoryColumns = {
 };
 export const years = [2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011, 2010, 2009, 2008, 2007, 2006, 2005, 2004, 2003, 2002, 2001, 2000, 
   1999, 1998, 1997, 1996, 1995, 1994, 1993, 1992, 1991, 1990];
-export const columnLabel = {
-  "make": "Make",
-  "model": "Model",
-  "budget": "Budget",
-  "listing_link": "Listing Link",
-  "year": "Year",
-  "mileage": "Mileage",
-  "desired_price": "Desired Price",
-  "offered_price": "Price offered",
-  "reprise": "Reprise",
-  "inspection_date": "Inspection Date",
-  "service": "Service",
-  "date_maintenance": "Date Entretien",
-  "wanted_part": "Pièce recherchée",
-  "request_details": "Détails de la demande",
-}
 export const sourceList = [
   {label: "Voitures.ci", value: "Voitures.ci", _id: "Voitures.ci"},
   {label: "Whatsapp", value: "Whatsapp", _id: "Whatsapp"},
@@ -73,7 +57,12 @@ export const serviceOptions = [
   { label: "Freinage", value: "Freinage", _id: "Freinage" },
   { label: "Essuies-Glace", value: "Essuies-Glace", _id: "Essuies-Glace" },
   { label: "Autre", value: "Autre", _id: "Autre" }
-]
+];
+export const getCategoryName = (value) => {
+  let findObj = categories.find(x => x.value === value);
+  if (findObj && findObj.name) return findObj.name;
+  else return "";
+}
 export const getTimeSince = (date) => {
   const seconds = Math.floor((new Date() - new Date(date)) / 1000);
 

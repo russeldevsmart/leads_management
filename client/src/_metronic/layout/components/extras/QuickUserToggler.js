@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-imports */
 /* eslint-disable no-script-url,jsx-a11y/anchor-is-valid */
 import React, { useMemo } from "react";
+import { useIntl } from "react-intl";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 // import { useSelector } from "react-redux";
 import SVG from "react-inlinesvg";
@@ -10,6 +11,7 @@ import { useHtmlClassService } from "../../_core/MetronicLayout";
 import { UserProfileDropdown } from "./dropdowns/UserProfileDropdown";
 
 export function QuickUserToggler() {
+  const intl = useIntl();
   // const { user } = useSelector((state) => state.auth);
   const uiService = useHtmlClassService();
   const layoutProps = useMemo(() => {
@@ -24,7 +26,7 @@ export function QuickUserToggler() {
       {layoutProps.offcanvas && (
         <OverlayTrigger
           placement="right"
-          overlay={<Tooltip id="quick-user-tooltip">User Profile</Tooltip>}
+          overlay={<Tooltip id="quick-user-tooltip">{intl.formatMessage({id: "TOOLTIP.USER_PROFILE"})}</Tooltip>}
         >
           <div
             className="btn btn-icon btn-clean btn-lg w-40px h-40px"
