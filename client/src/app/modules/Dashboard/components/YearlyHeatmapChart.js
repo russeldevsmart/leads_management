@@ -129,25 +129,25 @@ function getChartOption(yearlyHeatmapData) {
           ranges: [{
             from: -1,
             to: 0,
-            name: 'low',
+            name: 'bas',
             color: success
           },
           {
             from: 1,
             to: 5,
-            name: 'medium',
+            name: 'moyen',
             color: primary
           },
           {
             from: 6,
             to: 10,
-            name: 'high',
+            name: 'haut',
             color: warning
           },
           {
             from: 11,
             to: 15,
-            name: 'extreme',
+            name: 'fort',
             color: danger
           }
           ]

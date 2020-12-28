@@ -89,6 +89,35 @@ export function Aside() {
 
               {/* begin::Item */}
               <li
+                className={`nav-item mb-3 ${getMenuItemActive("/dashboard")}`}
+                data-toggle="tooltip"
+                data-placement="rigth"
+                data-container="body"
+                data-boundary="window"
+                title="Dashboard"
+              >
+                <OverlayTrigger
+                  placement="right"
+                  overlay={
+                    <Tooltip id="dashboard">
+                      {intl.formatMessage({id: "MENU.DASHBOARD"})}
+                    </Tooltip>
+                  }
+                >
+                  <NavLink className="nav-link btn btn-icon btn-clean btn-lg" to="/dashboard" >
+                    <span className="svg-icon svg-icon-lg">
+                      <SVG
+                        src={toAbsoluteUrl(
+                          "/media/svg/icons/Layout/Layout-4-blocks.svg"
+                        )}
+                      />
+                    </span>
+                  </NavLink>
+                </OverlayTrigger>
+              </li>
+
+              {/* begin::Item */}
+              <li
                 className={`nav-item mb-3 ${getMenuItemActive("/leads")}`}
                 data-toggle="tooltip"
                 data-placement="rigth"
@@ -99,7 +128,7 @@ export function Aside() {
                 <OverlayTrigger
                   placement="right"
                   overlay={
-                    <Tooltip id="project-management">
+                    <Tooltip id="leads-management">
                       {intl.formatMessage({id: "TOOLTIP.ALL_LEADS"})}
                     </Tooltip>
                   }

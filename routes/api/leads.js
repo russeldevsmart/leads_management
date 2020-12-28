@@ -154,7 +154,7 @@ router.get("/get-dashboard-info", async (req, res) => {
       });
       data.push(cnt);
       if (last7DaysLabel.length < 7)
-        last7DaysLabel.push(moment(d).format("Do MMM"));
+        last7DaysLabel.push(moment(d).format("DD MMM"));
     }
     leadsCategoryChartData.push({name: categories[j].name, data});
   }
