@@ -453,30 +453,59 @@ export function LeadEditForm({ saveLead, lead, actionsLoading, onHide }) {
                               <div className="timeline-content d-flex align-items-center justify-content-between">
                                 <span className="mr-3">
                                   {comment.type === "comments" && (
-                                    <div dangerouslySetInnerHTML={{ 
-                                      __html: intl.formatMessage({id: "LEAD.COMMENTS.WRITE_COMMENT"}, {
-                                        name: `<span class="text-primary font-weight-bold">${comment.created_by.fullname}</span>`,
-                                        comment: `<b>${comment.content}</b>`
-                                      })
-                                    }}></div>
+                                    <div
+                                      dangerouslySetInnerHTML={{
+                                        __html: intl.formatMessage(
+                                          { id: "LEAD.COMMENTS.WRITE_COMMENT" },
+                                          {
+                                            name: `<span class="text-primary font-weight-bold">${comment.created_by.fullname}</span>`,
+                                            comment: `<b>${comment.content}</b>`,
+                                          }
+                                        ),
+                                      }}
+                                    ></div>
                                   )}
                                   {comment.type === "action_created" && (
-                                    <div dangerouslySetInnerHTML={{ 
-                                      __html: intl.formatMessage({id: "LEAD.COMMENTS.CREATED_BY"}, {name: `<span class="text-primary font-weight-bold">${comment.created_by.fullname}</span>`})
-                                    }}></div>
+                                    <div
+                                      dangerouslySetInnerHTML={{
+                                        __html: intl.formatMessage(
+                                          { id: "LEAD.COMMENTS.CREATED_BY" },
+                                          {
+                                            name: `<span class="text-primary font-weight-bold">${comment.created_by.fullname}</span>`,
+                                          }
+                                        ),
+                                      }}
+                                    ></div>
                                   )}
                                   {comment.type === "action_updated" && (
-                                    <div dangerouslySetInnerHTML={{ 
-                                      __html: intl.formatMessage({id: "LEAD.COMMENTS.UPDATED_BY"}, {
-                                        name: `<span class="text-primary font-weight-bold">${comment.created_by.fullname}</span>`,
-                                        content: `<b>${comment.content}</b>`
-                                      })
-                                    }}></div>
+                                    <div
+                                      dangerouslySetInnerHTML={{
+                                        __html: intl.formatMessage(
+                                          { id: "LEAD.COMMENTS.UPDATED_BY" },
+                                          {
+                                            name: `<span class="text-primary font-weight-bold">${comment.created_by.fullname}</span>`,
+                                            content: `<b>${comment.content}</b>`,
+                                          }
+                                        ),
+                                      }}
+                                    ></div>
                                   )}
                                 </span>
                                 <span className="text-muted text-right">
-                                  {uiHelpers.getTimeSince(comment.created_on)}{" "}
-                                  ago
+                                  {intl.formatMessage(
+                                    {
+                                      id: `DATE.${
+                                        uiHelpers.getTimeSince(
+                                          comment.created_on
+                                        ).unit
+                                      }_AGO`,
+                                    },
+                                    {
+                                      number: uiHelpers.getTimeSince(
+                                        comment.created_on
+                                      ).number,
+                                    }
+                                  )}
                                 </span>
                               </div>
                             </div>

@@ -185,23 +185,8 @@ function AccountInformation(props) {
                 {...formik.getFieldProps("language")}
               >
                 <option>Select Language...</option>
-                <option value="id">Bahasa Indonesia - Indonesian</option>
-                <option value="msa">Bahasa Melayu - Malay</option>
-                <option value="ca">Català - Catalan</option>
-                <option value="cs">Čeština - Czech</option>
-                <option value="da">Dansk - Danish</option>
-                <option value="de">Deutsch - German</option>
                 <option value="en">English</option>
-                <option value="en-gb">English UK - British English</option>
-                <option value="es">Español - Spanish</option>
-                <option value="eu">Euskara - Basque (beta)</option>
-                <option value="fil">Filipino</option>
                 <option value="fr">Français - French</option>
-                <option value="pt">Português - Portuguese</option>
-                <option value="ro">Română - Romanian</option>
-                <option value="ru">Русский - Russian</option>
-                <option value="sr">Српски - Serbian</option>
-                <option value="uk">Українська мова - Ukrainian</option>
               </select>
             </div>
           </div>

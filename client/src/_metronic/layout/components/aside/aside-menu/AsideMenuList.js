@@ -21,7 +21,7 @@ export function AsideMenuList({ layoutProps }) {
     e.preventDefault();
     const initialFilter = {
       sortOrder: "-1",
-      sortField: "name",
+      sortField: "edited_on",
       pageNumber: 1,
       pageSize: 10,
     };

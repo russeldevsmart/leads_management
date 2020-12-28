@@ -7,10 +7,20 @@ export const sizePerPageList = [
 ];
 export const initialFilter = {
   sortOrder: "-1",
-  sortField: "name",
+  sortField: "edited_on",
   pageNumber: 1,
   pageSize: 10
 };
+export const statusList = [
+  { label: "Nouveau", value: "Nouveau", _id: "Nouveau", color: "primary" },
+  { label: "Froid", value: "Froid", _id: "Froid", color: "light-primary" }, 
+  { label: "Tiède", value: "Tiède", _id: "Tiède", color: "success" },
+  { label: "Chaud", value: "Chaud", _id: "Chaud", color: "info" },
+  { label: "RDV", value: "RDV", _id: "RDV", color: "warning" },
+  { label: "Transmis", value: "Transmis", _id: "Transmis", color: "danger" },
+  { label: "Gagné", value: "Gagné", _id: "Gagné", color: "light" },
+  { label: "Perdu", value: "Perdu", _id: "Perdu", color: "dark" },
+];
 export const categories = [
   { name: "Voitures Neuves", value: "new_cars" },
   { name: "Voitures Occasion", value: "used_cars" },
@@ -69,31 +79,32 @@ export const getTimeSince = (date) => {
   let interval = seconds / 31536000;
 
   if (interval > 1) {
-    return Math.floor(interval) + " years";
+    return { number: Math.floor(interval), unit: "YEARS" };
   }
   interval = seconds / 2592000;
   if (interval > 1) {
-    return Math.floor(interval) + " months";
+    return { number: Math.floor(interval), unit: "MONTHS" };
   }
   interval = seconds / 604800;
   if (interval > 1) {
-    return Math.floor(interval) + " weeks";
+    return { number: Math.floor(interval), unit: "WEEKS" };
   }
   interval = seconds / 86400;
   if (interval > 1) {
+    
     if (Math.floor(interval) === 1)
-      return Math.floor(interval) + " day";
-    return Math.floor(interval) + " days";
+      return { number: Math.floor(interval), unit: "DAY" };
+    return { number: Math.floor(interval), unit: "DAYS" };
   }
   interval = seconds / 3600;
   if (interval > 1) {
-    return Math.floor(interval) + " hours";
+    return { number: Math.floor(interval), unit: "HOURS" };
   }
   interval = seconds / 60;
   if (interval > 1) {
-    return Math.floor(interval) + " minutes";
+    return { number: Math.floor(interval), unit: "MINUTES" };
   }
-  return Math.floor(seconds) + " seconds";
+  return { number: Math.floor(seconds), unit: "SECONDS" };
 }
 export function getDiffKeys(o1, o2) {
   let diffKeys = [];

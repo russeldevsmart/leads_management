@@ -20,15 +20,15 @@ export default function WeeklyLeadsChart() {
       if (!weekly_leads_element) {
         return;
       }
-      
-      const chart = new ApexCharts(weekly_leads_element, getChartOption(weeklyLeadsChartData));
+      const labels = [intl.formatMessage({id: "CHART.LAST_7_DAYS"}), intl.formatMessage({id: "CHART.LAST_7_DAYS_BEFORE_7_DAYS"})];
+      const chart = new ApexCharts(weekly_leads_element, getChartOption(weeklyLeadsChartData, labels));
       chart.render();
       return function cleanUp() {
         chart.destroy();
       };
     }
 
-  }, [weeklyLeadsChartData]);
+  }, [weeklyLeadsChartData, intl]);
 
   return (
     <>
@@ -47,17 +47,17 @@ export default function WeeklyLeadsChart() {
   );
 };
 
-function getChartOption(weeklyLeadsChartData) {
+function getChartOption(weeklyLeadsChartData, labels) {
   // Shared Colors Definition
   const primary = '#6993FF';
   const success = '#1BC5BD';
 
   const options = {
     series: [{
-      name: 'Last 7 days',
+      name: labels[0],
       data: weeklyLeadsChartData.data
     }, {
-      name: 'Last 7 days before 7 days',
+      name: labels[1],
       data: weeklyLeadsChartData.data1
     }],
     chart: {

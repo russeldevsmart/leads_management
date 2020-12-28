@@ -1,6 +1,7 @@
 import React from "react";
 import PhoneInput from 'react-phone-input-2';
 import {Spinner} from "react-bootstrap";
+import { useIntl } from "react-intl";
 
 import 'react-phone-input-2/lib/material.css'
 
@@ -24,6 +25,7 @@ export function PhoneNumberInput({
   loading,
   ...props
 }) {
+  const intl = useIntl();
   return (
     <>
       {/* {label && <label>{label}</label>} */}
@@ -52,7 +54,9 @@ export function PhoneNumberInput({
       }
       {
         !loading && isValid === "NOTHING" && (
-          <div className="feedback">Please input <b>{label}</b></div>
+          <div className="feedback"
+            dangerouslySetInnerHTML={{ __html: intl.formatMessage({id: "FORM.INPUT_FEEDBACK_LABEL"}, {name: label}) }}>
+          </div>
         )
       }
       {

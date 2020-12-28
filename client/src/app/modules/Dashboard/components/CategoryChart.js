@@ -73,6 +73,12 @@ function getChartOption(leadsCategoryChartData) {
     },
     xaxis: {
       categories: categories,
+      type: 'string',
+      labels: {
+        formatter: function (val) {
+          return val.toFixed(0)
+        }
+      }
     },
     fill: {
         opacity: 1

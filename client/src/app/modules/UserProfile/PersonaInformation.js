@@ -280,7 +280,7 @@ function PersonaInformation(props) {
                 </div>
               ) : null}
               <span className="form-text text-muted">
-                We'll never share your phone with anyone else.
+                {intl.formatMessage({id: "PROFILE.PHONE_DESCRIPTION"})}
               </span>
             </div>
           </div>

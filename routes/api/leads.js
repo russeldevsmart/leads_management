@@ -149,7 +149,7 @@ router.get("/get-dashboard-info", async (req, res) => {
       const td_end = new Date(d);
       td_end.setHours(23, 59, 59, 999);
       const cnt = await Lead.countDocuments({
-        source: sources[j],
+        category: categories[j].value,
         created_on: { $gte: td_start, $lt: td_end },
       });
       data.push(cnt);
@@ -295,11 +295,24 @@ router.post("/create", (req, res) => {
 router.post("/find", async (req, res) => {
   const { queryParams } = req.body;
   const findQuery = queryParams.category ? { category: queryParams.category } : {};
+  if (queryParams.filter) {
+    const filterOptions = queryParams.filter;
+    if (filterOptions.source)
+      findQuery.source = filterOptions.source;
+    if (filterOptions.status)
+      findQuery.status = filterOptions.status;
+    if (filterOptions.make)
+      findQuery.make = filterOptions.make;
+    if (filterOptions.model)
+      findQuery.model = filterOptions.model;
+    if (filterOptions.price)
+      findQuery.budget = { $gte: parseInt(filterOptions.price[0]), $lte: parseInt(filterOptions.price[1]) };
+  }
   const totalCount = await Lead.countDocuments(findQuery);
   Lead.find(findQuery)
     .skip(queryParams.pageSize * (queryParams.pageNumber - 1))
     .limit(queryParams.pageSize)
-    .sort({ [queryParams.sortField]: -1, created_by: 1 })
+    .sort({ [queryParams.sortField]: -1 })
     .populate("make")
     .populate("model")
     .populate("edited_by")

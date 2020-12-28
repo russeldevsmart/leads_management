@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardHeaderToolbar,
 } from "../../../../_metronic/_partials/controls";
+import { LeadsFilter } from "./leads-filter/LeadsFilter";
 import { LeadsTable } from "./leads-table/LeadsTable";
 import { LeadsGrouping } from "./leads-grouping/LeadsGrouping";
 import { useLeadsUIContext } from "./LeadsUIContext";
@@ -43,6 +44,7 @@ export function LeadsCard() {
         </CardHeaderToolbar>
       </CardHeader>
       <CardBody>
+        <LeadsFilter />
         {leadsUIProps.ids.length > 0 && <LeadsGrouping />}
         <LeadsTable />
       </CardBody>
