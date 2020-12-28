@@ -90,9 +90,7 @@
   "FORM.INPUT_FEEDBACK_LABEL": "Please input <b>{name}</b>",
   "FORM.INPUT_FEEDBACK_CORRECT": "{name} was entered correct",
   "FORM.SAVE_CHANGES": "Save Changes",
-  
   "FORM.CANCEL": "Cancel",
-
   "TOOLTIP.ALL_LEADS": "All Leads",
   "TOOLTIP.USER_PROFILE": "User Profile",
   "TOOLTIP.TOGGLE_ASIDE": "Toggle Aside",
