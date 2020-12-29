@@ -20,13 +20,13 @@ export default function LeadsStatusChart() {
       return;
     }
     
-    const chart = new ApexCharts(status_chart_element, getChartOption(leadStatuChartData));
+    const chart = new ApexCharts(status_chart_element, getChartOption(leadStatuChartData, intl));
     chart.render();
     return function cleanUp() {
       chart.destroy();
     };
 
-  }, [leadStatuChartData]);
+  }, [leadStatuChartData, intl]);
 
   return (
     <>
@@ -44,7 +44,7 @@ export default function LeadsStatusChart() {
   );
 };
 
-function getChartOption(leadStatuChartData) {
+function getChartOption(leadStatuChartData, intl) {
   let chartData = [], label = [];
   leadStatuChartData.forEach(element => {
     chartData.push(element.count);
@@ -77,6 +77,26 @@ function getChartOption(leadStatuChartData) {
           reset: false,
         },
       },
+      locales: [{
+        name: "en",
+        options: {
+          toolbar: {
+            "exportToSVG": "Download SVG",
+            "exportToPNG": "Download PNG",
+            "exportToCSV": "Download CSV",
+          }
+        }
+      }, {
+        name: "fr",
+        options: {
+          toolbar: {
+            "exportToSVG": "Télécharger SVG",
+            "exportToPNG": "Télécharger PNG",
+            "exportToCSV": "Télécharger CSV",
+          }
+        }
+      }],
+      defaultLocale: intl.locale
     },
     labels: label,
     responsive: [{

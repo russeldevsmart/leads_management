@@ -19,14 +19,13 @@ export default function LeadsSourceChart() {
     if (!source_chart_element) {
       return;
     }
-    
-    const chart = new ApexCharts(source_chart_element, getChartOption(leadSourceChartData));
+    const chart = new ApexCharts(source_chart_element, getChartOption(leadSourceChartData, intl));
     chart.render();
     return function cleanUp() {
       chart.destroy();
     };
 
-  }, [leadSourceChartData]);
+  }, [leadSourceChartData, intl]);
 
   return (
     <>
@@ -44,11 +43,14 @@ export default function LeadsSourceChart() {
   );
 };
 
-function getChartOption(leadSourceChartData) {
+function getChartOption(leadSourceChartData, intl) {
   let chartData = [], label = [];
   leadSourceChartData.forEach(element => {
     chartData.push(element.count);
-    label.push(element.label);
+    if (element.label === "Unknown")
+      label.push(intl.formatMessage({id: "UNKNOWN"}));
+    else
+      label.push(element.label);
   });
   
   // Shared Colors Definition
@@ -78,6 +80,26 @@ function getChartOption(leadSourceChartData) {
           reset: false,
         },
       },
+      locales: [{
+        name: "en",
+        options: {
+          toolbar: {
+            "exportToSVG": "Download SVG",
+            "exportToPNG": "Download PNG",
+            "exportToCSV": "Download CSV",
+          }
+        }
+      }, {
+        name: "fr",
+        options: {
+          toolbar: {
+            "exportToSVG": "Télécharger SVG",
+            "exportToPNG": "Télécharger PNG",
+            "exportToCSV": "Télécharger CSV",
+          }
+        }
+      }],
+      defaultLocale: intl.locale
     },
     labels: label,
     responsive: [{

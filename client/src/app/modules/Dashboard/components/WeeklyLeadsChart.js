@@ -21,13 +21,16 @@ export default function WeeklyLeadsChart() {
         return;
       }
       const labels = [intl.formatMessage({id: "CHART.LAST_7_DAYS"}), intl.formatMessage({id: "CHART.LAST_7_DAYS_BEFORE_7_DAYS"})];
-      const chart = new ApexCharts(weekly_leads_element, getChartOption(weeklyLeadsChartData, labels));
+      const chartLabels = weeklyLeadsChartData.label;
+      const newChartLabels = chartLabels.map((label) => {
+        return intl.formatMessage({id: `DATE.${label.toUpperCase()}`});
+      });
+      const chart = new ApexCharts(weekly_leads_element, getChartOption({...weeklyLeadsChartData, label: newChartLabels}, labels, intl));
       chart.render();
       return function cleanUp() {
         chart.destroy();
       };
     }
-
   }, [weeklyLeadsChartData, intl]);
 
   return (
@@ -47,7 +50,7 @@ export default function WeeklyLeadsChart() {
   );
 };
 
-function getChartOption(weeklyLeadsChartData, labels) {
+function getChartOption(weeklyLeadsChartData, labels, intl) {
   // Shared Colors Definition
   const primary = '#6993FF';
   const success = '#1BC5BD';
@@ -77,6 +80,26 @@ function getChartOption(weeklyLeadsChartData, labels) {
           reset: false,
         },
       },
+      locales: [{
+        name: "en",
+        options: {
+          toolbar: {
+            "exportToSVG": "Download SVG",
+            "exportToPNG": "Download PNG",
+            "exportToCSV": "Download CSV",
+          }
+        }
+      }, {
+        name: "fr",
+        options: {
+          toolbar: {
+            "exportToSVG": "Télécharger SVG",
+            "exportToPNG": "Télécharger PNG",
+            "exportToCSV": "Télécharger CSV",
+          }
+        }
+      }],
+      defaultLocale: intl.locale
     },
     dataLabels: {
       enabled: false

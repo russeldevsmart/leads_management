@@ -1,17 +1,20 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import {PaginationTotalStandalone} from "react-bootstrap-table2-paginator";
+import { useIntl } from "react-intl";
 
 export function PaginationToolbar(props) {
+  const intl = useIntl();
   const { isLoading, paginationProps } = props;
   const {
     sizePerPageList,
     sizePerPage,
     totalSize,
     onSizePerPageChange = [
-      { text: "3", value: 3 },
-      { text: "5", value: 5 },
-      { text: "10", value: 10 }
+      { text: "10", value: 10 },
+      { text: "25", value: 25 },
+      { text: "50", value: 50 },
+      { text: "100", value: 100 },
     ]
   } = paginationProps;
   const style = {
@@ -27,7 +30,7 @@ export function PaginationToolbar(props) {
     <div className="d-flex align-items-center py-3">
       {isLoading && (
         <div className="d-flex align-items-center">
-          <div className="mr-2 text-muted">Loading...</div>
+          <div className="mr-2 text-muted">{intl.formatMessage({id: "PAGINATION.LOADING"})}</div>
           <div className="spinner spinner-primary mr-10"></div>
         </div>
       )}

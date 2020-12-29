@@ -21,20 +21,12 @@ export function AuthPage() {
           <div
             className="login-aside d-flex flex-row-auto bgi-size-cover bgi-no-repeat p-10 p-lg-10"
             style={{
-              backgroundImage: `url(${toAbsoluteUrl("/media/bg/bg-4.jpg")})`,
+              backgroundImage: `url(${toAbsoluteUrl("/media/bg/auth_banner.png")})`,
             }}
           >
             {/*begin: Aside Container*/}
             <div className="d-flex flex-row-fluid flex-column justify-content-between">
-              {/* start:: Aside header */}
-              <Link to="/" className="flex-column-auto mt-5 pb-lg-0 pb-10">
-                <img
-                  alt="Logo"
-                  className="max-h-70px"
-                  src={toAbsoluteUrl("/media/logos/auth-logo.png")}
-                />
-              </Link>
-              {/* end:: Aside header */}
+             
 
               {/* start:: Aside content */}
               <div className="flex-column-fluid d-flex flex-column justify-content-center">
@@ -87,9 +79,19 @@ export function AuthPage() {
               </Link>
             </div>
             {/*end::Content header*/}
-
             {/* begin::Content body */}
-            <div className="d-flex flex-column-fluid flex-center mt-30 mt-lg-0">
+            <div className="d-flex flex-column-fluid flex-center mt-30 mt-lg-0 flex-column">
+
+              {/* start:: Aside header */}
+              <Link to="/" className="flex-column-auto mb-15 pb-lg-0 pb-10">
+                <img
+                  alt="Logo"
+                  className="max-h-70px"
+                  src={toAbsoluteUrl("/media/logos/auth-logo.png")}
+                />
+              </Link>
+              {/* end:: Aside header */}
+
               <Switch>
                 <ContentRoute path="/auth/login" component={Login} />
                 <ContentRoute

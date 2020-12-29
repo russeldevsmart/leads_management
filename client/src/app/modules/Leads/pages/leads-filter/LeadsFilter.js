@@ -4,8 +4,8 @@ import { useIntl } from "react-intl";
 import { Formik } from "formik";
 import { isEqual } from "lodash";
 import Select from "react-select";
-import { Range } from 'rc-slider';
-import 'rc-slider/assets/index.css';
+import { Range } from "rc-slider";
+import "rc-slider/assets/index.css";
 import * as uiHelpers from "../LeadsUIHelpers";
 import { useLeadsUIContext } from "../LeadsUIContext";
 import * as actions from "../../_redux/leadsActions";
@@ -77,7 +77,7 @@ export function LeadsFilter({ listLoading }) {
           source: "",
           make: "",
           model: "",
-          price: [0, 999999],
+          price: [0, 100000000],
         }}
         onSubmit={(values) => {
           applyFilter(values);
@@ -95,48 +95,52 @@ export function LeadsFilter({ listLoading }) {
               <div className="col-lg-2">
                 <Select
                   name="status"
-                  placeholder={intl.formatMessage({id: "PLACEHOLDER.SELECT_STATUS"})}
+                  placeholder={intl.formatMessage({
+                    id: "PLACEHOLDER.SELECT_STATUS",
+                  })}
                   isClearable={true}
                   options={uiHelpers.statusList}
                   formatOptionLabel={colorOptionLabel}
                   onChange={(option) => {
-                    if (option)
-                      setFieldValue("status", option.value);
-                    else
-                      setFieldValue("status", null);
+                    if (option) setFieldValue("status", option.value);
+                    else setFieldValue("status", null);
                     handleSubmit();
                   }}
                 />
-                <small className="form-text text-muted" 
+                <small
+                  className="form-text text-muted"
                   dangerouslySetInnerHTML={{
-                    __html: intl.formatMessage({id: "FILTER.FILTER_STATUS"})
-                  }}>
-                </small>
+                    __html: intl.formatMessage({ id: "FILTER.FILTER_STATUS" }),
+                  }}
+                ></small>
               </div>
               <div className="col-lg-2">
                 <Select
                   name="source"
-                  placeholder={intl.formatMessage({id: "PLACEHOLDER.SELECT_SOURCE"})}
+                  placeholder={intl.formatMessage({
+                    id: "PLACEHOLDER.SELECT_SOURCE",
+                  })}
                   isClearable={true}
                   options={uiHelpers.sourceList}
                   onChange={(option) => {
-                    if (option)
-                      setFieldValue("source", option.value);
-                    else
-                      setFieldValue("source", null);
+                    if (option) setFieldValue("source", option.value);
+                    else setFieldValue("source", null);
                     handleSubmit();
                   }}
                 />
-                <small className="form-text text-muted" 
+                <small
+                  className="form-text text-muted"
                   dangerouslySetInnerHTML={{
-                    __html: intl.formatMessage({id: "FILTER.FILTER_SOURCE"})
-                  }}>
-                </small>
+                    __html: intl.formatMessage({ id: "FILTER.FILTER_SOURCE" }),
+                  }}
+                ></small>
               </div>
               <div className="col-lg-2">
                 <Select
                   name="make"
-                  placeholder={intl.formatMessage({id: "PLACEHOLDER.SELECT_MAKE"})}
+                  placeholder={intl.formatMessage({
+                    id: "PLACEHOLDER.SELECT_MAKE",
+                  })}
                   isClearable={true}
                   options={makes}
                   onChange={(option) => {
@@ -145,8 +149,7 @@ export function LeadsFilter({ listLoading }) {
                       setFieldValue("make", option._id);
                       if (option._id !== values.make)
                         setFieldValue("model", null);
-                    }
-                    else {
+                    } else {
                       dispatch(actions.fetchCarModels([]));
                       setFieldValue("make", null);
                       setFieldValue("model", null);
@@ -154,43 +157,45 @@ export function LeadsFilter({ listLoading }) {
                     handleSubmit();
                   }}
                 />
-                <small className="form-text text-muted" 
+                <small
+                  className="form-text text-muted"
                   dangerouslySetInnerHTML={{
-                    __html: intl.formatMessage({id: "FILTER.FILTER_MAKE"})
-                  }}>
-                </small>
+                    __html: intl.formatMessage({ id: "FILTER.FILTER_MAKE" }),
+                  }}
+                ></small>
               </div>
               <div className="col-lg-2">
                 <Select
                   isClearable={true}
                   name="model"
-                  placeholder={intl.formatMessage({id: "PLACEHOLDER.SELECT_MODEL"})}
+                  placeholder={intl.formatMessage({
+                    id: "PLACEHOLDER.SELECT_MODEL",
+                  })}
                   options={models}
-                  value={models && models.filter(option => values.model === option._id)}
+                  value={
+                    models &&
+                    models.filter((option) => values.model === option._id)
+                  }
                   onChange={(option) => {
-                    if (option)
-                      setFieldValue("model", option._id);
-                    else
-                      setFieldValue("model", null);
+                    if (option) setFieldValue("model", option._id);
+                    else setFieldValue("model", null);
                     handleSubmit();
                   }}
                 />
-                <small className="form-text text-muted" 
+                <small
+                  className="form-text text-muted"
                   dangerouslySetInnerHTML={{
-                    __html: intl.formatMessage({id: "FILTER.FILTER_MODEL"})
-                  }}>
-                </small>
+                    __html: intl.formatMessage({ id: "FILTER.FILTER_MODEL" }),
+                  }}
+                ></small>
               </div>
               <div className="col-lg-2">
                 <Range
                   defaultValue={values.price}
                   className="mb-1"
-                  tipFormatter={(value) => {
-                    console.log(value)
-                  }}
                   min={0}
-                  max={999999}
-                  step={1}
+                  max={100000000}
+                  step={100}
                   onChange={(values) => {
                     setFieldValue("price", values);
                   }}
@@ -200,13 +205,25 @@ export function LeadsFilter({ listLoading }) {
                   }}
                 />
                 <span className="text-dark-75">
-                  <b>{values.price ? values.price[0] : 0}</b> CFA ~ <b>{values.price ? values.price[1] : 0}</b> CFA
+                  <b>
+                    {values.price
+                      ? uiHelpers.thousandsSeperator(values.price[0])
+                      : 0}
+                  </b>{" "}
+                  CFA ~{" "}
+                  <b>
+                    {values.price
+                      ? uiHelpers.thousandsSeperator(values.price[1])
+                      : 0}
+                  </b>{" "}
+                  CFA
                 </span>
-                <small className="form-text text-muted" 
+                <small
+                  className="form-text text-muted"
                   dangerouslySetInnerHTML={{
-                    __html: intl.formatMessage({id: "FILTER.FILTER_BUDGET"})
-                  }}>
-                </small>
+                    __html: intl.formatMessage({ id: "FILTER.FILTER_BUDGET" }),
+                  }}
+                ></small>
               </div>
             </div>
           </form>

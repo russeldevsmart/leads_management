@@ -20,13 +20,13 @@ export default function YearlyHeatmapChart() {
       return;
     }
     
-    const chart = new ApexCharts(yearly_heatmap_elem, getChartOption(yearlyHeatmapData));
+    const chart = new ApexCharts(yearly_heatmap_elem, getChartOption(yearlyHeatmapData, intl));
     chart.render();
     return function cleanUp() {
       chart.destroy();
     };
 
-  }, [yearlyHeatmapData]);
+  }, [yearlyHeatmapData, intl]);
 
   return (
     <>
@@ -46,60 +46,61 @@ export default function YearlyHeatmapChart() {
   );
 };
 
-function getChartOption(yearlyHeatmapData) {
+function getChartOption(yearlyHeatmapData, intl) {
   // Shared Colors Definition
   const primary = '#6993FF';
   const success = '#1BC5BD';
   const warning = '#FFA800';
   const danger = '#F64E60';
+  const info = "#8950FC";
 
   const options = {
     series: [{
-      name: 'Jan',
+      name: intl.formatMessage({id: "DATE.JAN"}),
       data: yearlyHeatmapData['Jan']
     },
     {
-      name: 'Feb',
+      name: intl.formatMessage({id: "DATE.FEB"}),
       data: yearlyHeatmapData['Feb']
     },
     {
-      name: 'Mar',
+      name: intl.formatMessage({id: "DATE.MAR"}),
       data: yearlyHeatmapData['Mar']
     },
     {
-      name: 'Apr',
+      name: intl.formatMessage({id: "DATE.APR"}),
       data: yearlyHeatmapData['Apr']
     },
     {
-      name: 'May',
+      name: intl.formatMessage({id: "DATE.MAY"}),
       data: yearlyHeatmapData['May']
     },
     {
-      name: 'Jun',
+      name: intl.formatMessage({id: "DATE.JUN"}),
       data: yearlyHeatmapData['Jun']
     },
     {
-      name: 'Jul',
+      name: intl.formatMessage({id: "DATE.JUL"}),
       data: yearlyHeatmapData['Jul']
     },
     {
-      name: 'Aug',
+      name: intl.formatMessage({id: "DATE.AUG"}),
       data: yearlyHeatmapData['Aug']
     },
     {
-      name: 'Sep',
+      name: intl.formatMessage({id: "DATE.SEP"}),
       data: yearlyHeatmapData['Sep']
     },
     {
-      name: 'Oct',
+      name: intl.formatMessage({id: "DATE.OCT"}),
       data: yearlyHeatmapData['Oct']
     },
     {
-      name: 'Nov',
+      name: intl.formatMessage({id: "DATE.NOV"}),
       data: yearlyHeatmapData['Nov']
     },
     {
-      name: 'Dec',
+      name: intl.formatMessage({id: "DATE.DEC"}),
       data: yearlyHeatmapData['Dec']
     }
     ],
@@ -120,6 +121,26 @@ function getChartOption(yearlyHeatmapData) {
           reset: false,
         },
       },
+      locales: [{
+        name: "en",
+        options: {
+          toolbar: {
+            "exportToSVG": "Download SVG",
+            "exportToPNG": "Download PNG",
+            "exportToCSV": "Download CSV",
+          }
+        }
+      }, {
+        name: "fr",
+        options: {
+          toolbar: {
+            "exportToSVG": "Télécharger SVG",
+            "exportToPNG": "Télécharger PNG",
+            "exportToCSV": "Télécharger CSV",
+          }
+        }
+      }],
+      defaultLocale: intl.locale
     },
     plotOptions: {
       heatmap: {
@@ -129,20 +150,26 @@ function getChartOption(yearlyHeatmapData) {
           ranges: [{
             from: -1,
             to: 0,
-            name: 'bas',
+            name: 'nul',
             color: success
           },
           {
             from: 1,
             to: 5,
-            name: 'moyen',
+            name: 'bas',
             color: primary
           },
           {
             from: 6,
             to: 10,
-            name: 'haut',
+            name: 'moyen',
             color: warning
+          },
+          {
+            from: 11,
+            to: 15,
+            name: 'haut',
+            color: info
           },
           {
             from: 11,
