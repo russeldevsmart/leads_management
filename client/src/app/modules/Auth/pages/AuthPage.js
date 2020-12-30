@@ -30,31 +30,13 @@ export function AuthPage() {
 
               {/* start:: Aside content */}
               <div className="flex-column-fluid d-flex flex-column justify-content-center">
-                <h3 className="font-size-h1 mb-5 text-white">
-                  Welcome to Metronic!
-                </h3>
-                <p className="font-weight-lighter text-white opacity-80">
-                  The ultimate Bootstrap & React 16 admin theme framework for
-                  next generation web apps.
-                </p>
               </div>
               {/* end:: Aside content */}
 
               {/* start:: Aside footer for desktop */}
               <div className="d-none flex-column-auto d-lg-flex justify-content-between mt-10">
                 <div className="opacity-70 font-weight-bold	text-white">
-                  &copy; 2020 Metronic
-                </div>
-                <div className="d-flex">
-                  <Link to="/terms" className="text-white">
-                    Privacy
-                  </Link>
-                  <Link to="/terms" className="text-white ml-10">
-                    Legal
-                  </Link>
-                  <Link to="/terms" className="text-white ml-10">
-                    Contact
-                  </Link>
+                  &copy; 2020 <a href="www.mycar.africa" target="_blank">AfriCar Group</a>
                 </div>
               </div>
               {/* end:: Aside footer for desktop */}

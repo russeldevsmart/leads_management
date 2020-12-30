@@ -77,6 +77,11 @@ function getChartOption(leadsCategoryChartData, intl) {
 
   const options = {
     series: series,
+    tooltip: {
+      y: {
+        formatter: (value) => { return value },
+      },            
+    },
     chart: {
       type: "bar",
       height: 350,
@@ -100,7 +105,7 @@ function getChartOption(leadsCategoryChartData, intl) {
           }
         }
       }],
-      defaultLocale: intl.locale
+      defaultLocale: intl.locale,
     },
     plotOptions: {
       bar: {

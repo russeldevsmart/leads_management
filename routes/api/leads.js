@@ -95,18 +95,19 @@ router.get("/get-dashboard-info", async (req, res) => {
   let yearlyHeatmapData = {};
   for (let d = 1; d <= 12; d++) {
     const now = new Date();
-    now.setMonth(d);
+    now.setDate(1);
+    now.setMonth(d-1);
     const mon = moment(now).format("MMM");
     yearlyHeatmapData[mon] = [];
     for (let dd = 1; dd <= daysInMonth(d, 2020); dd++) {
       const d_start = new Date();
-      d_start.setMonth(d);
-      d_start.setDate(dd);
       d_start.setHours(0, 0, 0, 0);
+      d_start.setDate(dd);
+      d_start.setMonth(d-1);
       const d_end = new Date();
-      d_end.setMonth(d);
-      d_end.setDate(dd);
       d_end.setHours(23, 23, 59, 999);
+      d_end.setDate(dd);
+      d_end.setMonth(d-1);
       const cnt = await Lead.countDocuments({
         created_on: { $gte: d_start, $lt: d_end },
       });
