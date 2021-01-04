@@ -70,9 +70,9 @@ router.get("/get-dashboard-info", async (req, res) => {
     });
 
     const nd_start = new Date(d.getTime() - 6 * 24 * 60 * 60 * 1000);
-    nd_start.getHours(0, 0, 0, 0);
+    nd_start.setHours(0, 0, 0, 0);
     const nd_end = new Date(d.getTime() - 6 * 24 * 60 * 60 * 1000);
-    nd_end.getHours(23, 59, 59, 999);
+    nd_end.setHours(23, 59, 59, 999);
     const cnt1 = await Lead.countDocuments({
       created_on: { $gte: nd_start, $lt: nd_end },
     });
