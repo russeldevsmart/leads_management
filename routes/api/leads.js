@@ -33,12 +33,13 @@ router.get("/get-dashboard-info", async (req, res) => {
   const end = new Date();
   end.setHours(23, 59, 59, 999);
 
-  const totalLeads = await Lead.countDocuments({});
-  const newLeads = await Lead.countDocuments({ status: "Nouveau" });
+  const totalLeads = await Lead.countDocuments({ deleted: false });
+  const newLeads = await Lead.countDocuments({ status: "Nouveau", deleted: false });
   const ongoingLeads = await Lead.countDocuments({
     status: { $nin: ["Nouveau", "Perdu"] },
+    deleted: false
   });
-  const goneLeads = await Lead.countDocuments({ status: "Perdu" });
+  const goneLeads = await Lead.countDocuments({ status: "Perdu", deleted: false });
   const lastActions = await Action.find({})
     .sort({ date: -1 })
     .populate("lead")
@@ -67,6 +68,7 @@ router.get("/get-dashboard-info", async (req, res) => {
     td_end.setHours(23, 59, 59, 999);
     const cnt = await Lead.countDocuments({
       created_on: { $gte: td_start, $lt: td_end },
+      deleted: false
     });
 
     const nd_start = new Date(d.getTime() - 6 * 24 * 60 * 60 * 1000);
@@ -74,6 +76,7 @@ router.get("/get-dashboard-info", async (req, res) => {
     const nd_end = new Date(d.getTime() - 6 * 24 * 60 * 60 * 1000);
     nd_end.setHours(23, 59, 59, 999);
     const cnt1 = await Lead.countDocuments({
+      deleted: false,
       created_on: { $gte: nd_start, $lt: nd_end },
     });
     weeklyChartData.push(cnt);
@@ -83,6 +86,7 @@ router.get("/get-dashboard-info", async (req, res) => {
 
   // status pie chart data
   const leadStatuChartData = await Lead.aggregate([
+    { $match: { deleted: false } },
     {
       $group: {
         _id: "$status",
@@ -110,6 +114,7 @@ router.get("/get-dashboard-info", async (req, res) => {
       d_end.setMonth(d-1);
       const cnt = await Lead.countDocuments({
         created_on: { $gte: d_start, $lt: d_end },
+        deleted: false
       });
       yearlyHeatmapData[mon].push({ x: dd, y: cnt });
     }
@@ -119,20 +124,20 @@ router.get("/get-dashboard-info", async (req, res) => {
   let leadTypeChartData = []
   const types = [ "Particulier", "Professionnel", "Revendeur"];
   for (let k = 0; k < 3; k ++) {
-    const number = await Lead.countDocuments({client_type: types[k]});
+    const number = await Lead.countDocuments({client_type: types[k], deleted: false});
     leadTypeChartData.push ( {label: types[k], count: number} );
   }
-  let unkownCnt = await Lead.countDocuments({client_type: {$nin: types}});
+  let unkownCnt = await Lead.countDocuments({client_type: {$nin: types}, deleted: false});
   leadTypeChartData.push ({label: "Unknown", count: unkownCnt});
 
   // leads source chart data
   let leadSourceChartData = []
   const sources = ["Voitures.ci", "Whatsapp", "Sites Marques", "Facebook", "Instagram", "Téléphone", "Email", "Autre"]
   for (let k = 0; k < 8; k ++) {
-    const number = await Lead.countDocuments({source: sources[k]});
+    const number = await Lead.countDocuments({source: sources[k], deleted: false});
     leadSourceChartData.push ( {label: sources[k], count: number} );
   }
-  unkownCnt = await Lead.countDocuments({source: {$nin: sources}});
+  unkownCnt = await Lead.countDocuments({source: {$nin: sources}, deleted: false});
   leadSourceChartData.push ({label: "Unknown", count: unkownCnt});
 
   // category chart data per day
@@ -152,6 +157,7 @@ router.get("/get-dashboard-info", async (req, res) => {
       const cnt = await Lead.countDocuments({
         category: categories[j].value,
         created_on: { $gte: td_start, $lt: td_end },
+        deleted: false
       });
       data.push(cnt);
       if (last7DaysLabel.length < 7)
@@ -296,6 +302,7 @@ router.post("/create", (req, res) => {
 router.post("/find", async (req, res) => {
   const { queryParams } = req.body;
   const findQuery = queryParams.category ? { category: queryParams.category } : {};
+  findQuery.deleted = false;
   if (queryParams.filter) {
     const filterOptions = queryParams.filter;
     if (filterOptions.source)
@@ -403,16 +410,16 @@ router.post("/update", async (req, res) => {
 });
 
 router.delete("/delete", (req, res) => {
-  Lead.findByIdAndRemove(req.query.id, function (err, doc) {
+  Lead.findByIdAndUpdate(req.query.id, { $set: {deleted: true} }, function (err, doc) {
     return res.json({ message: "Success" });
   });
 });
 
 router.post("/deleteLeads", (req, res) => {
-  Lead.deleteMany({ _id: { $in: req.body.ids } }, function (err) {
+  Lead.updateMany({ _id: { $in: req.body.ids } }, { $set: {delete: true} }, function (err) {
     if (err) return res.status(400).json({ message: "Something went wrong!" });
     return res.json({ message: "Success" });
-  });
+  })
 });
 
 module.exports = router;

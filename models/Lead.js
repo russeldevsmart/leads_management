@@ -96,6 +96,10 @@ const LeadSchema = new Schema({
   status: {
     type: String,
   },
+  deleted: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 module.exports = Lead = mongoose.model("leads", LeadSchema);
